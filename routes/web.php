@@ -37,6 +37,7 @@ Route::group([
     Route::resource('/lessons', 'LessonController');
     Route::post('/lessons/{lesson}/addMaterial', 'LessonController@addMaterial');
     Route::put('/lessons/{lesson}/saveBoard', 'LessonController@saveBoard');
+    Route::post('/lessons/{lesson}/done', 'LessonController@done');
 
     Route::post('/video/call-user', 'VideoChatController@callUser');
     Route::post('/video/accept-call', 'VideoChatController@acceptCall');

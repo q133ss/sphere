@@ -15,7 +15,7 @@ class CreateLessonsTable extends Migration
     {
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('event_id')->unsigned();
+            $table->bigInteger('event_id')->unsigned()->nullable();
             $table->bigInteger('teacher_id')->unsigned();
             $table->bigInteger('student_id')->unsigned();
             $table->bigInteger('subject_id')->unsigned();

@@ -19,7 +19,10 @@
                                     <button class="btn btn-sm" :class="{'btn-primary': canvasMode == 'write'}" @click="setCanvasMode('write')"><i class="fa fa-font"></i></button>
                                 </div>
                             </div>
-							<button class="float-right btn btn-sm btn-primary" @click="save" v-if="role == 'teacher'">Сохранить</button>
+                            <div class="float-right">
+                                <button class="btn btn-sm btn-primary" @click="save" v-if="role == 'teacher'">Сохранить</button>
+                                <button class="btn btn-sm btn-success" @click="done" v-if="!lesson.done">Завершить урок</button>
+                            </div>
 						</div>
 						<div class="board-container" ref="boardContainer">
 							<canvas class="board-canvas" ref="boardCanvas"></canvas>
@@ -135,6 +138,13 @@ export default {
         }
     },
     methods: {
+        async done(){
+            try{
+                await axios.post('/lessons/' + this.lesson.id + '/done')
+                this.$set(this.lesson, 'done', 1)
+                alert('Урок успешно завершен')
+            }catch(e){}
+        },
         showMaterialModal(){
             this.materialModel = {}
             $('#modal-material').modal('show')

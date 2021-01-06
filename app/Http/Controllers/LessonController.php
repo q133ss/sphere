@@ -59,4 +59,12 @@ class LessonController extends Controller
             ]);
         }
     }
+    public function done(Lesson $lesson){
+        if($lesson->done) return false;
+        $lesson->status = 'success';
+        $lesson->save();
+        $teacher = $lesson->teacher;
+        $teacher->balance += $teacher->lesson_price;
+        $teacher->save();
+    }
 }
