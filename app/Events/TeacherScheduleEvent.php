@@ -15,18 +15,16 @@ class TeacherScheduleEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $type;
-    public $event;
-    public function __construct($type, $event)
+    public $events;
+    public $teacher_id;
+    public function __construct($teacher_id, $type, $events)
     {
         $this->type = $type;
-        $this->event = $event;
-    }
-    public function broadcastAs()
-    {
-        return 'event';
+        $this->teacher_id = $teacher_id;
+        $this->events = $events;
     }
     public function broadcastOn()
     {
-        return ['schedule.'.$this->event->teacher_id];
+        return new PrivateChannel('schedule-channel-' . $this->teacher_id);
     }
 }

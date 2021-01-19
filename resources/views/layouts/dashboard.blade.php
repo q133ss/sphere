@@ -19,7 +19,7 @@
 			<nav class="bg-light navbar-dark fixed-top d-flex justify-content-between align-items-center">
 				<a class="navbar-brand col-md-2 col-4" href="{{route('home')}}">Сфера</a>
 				<nav class="nav">
-					@if(!auth()->user()->isAdmin())<a class="nav-link" href="#">Мой счет: {{auth()->user()->balance}} <i class="fa fa-rub"></i></a>@endif
+					@if(!auth()->user()->isAdmin())<a class="nav-link" href="{{route(auth()->user()->role->name . '.payments.index')}}">Мой счет: {{auth()->user()->balance}} <i class="fa fa-rub"></i></a>@endif
 					<notifications user_id="{{auth()->id()}}"></notifications>
 					<div class="dropdown" href="#">
 						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{auth()->user()->name}}</a>
@@ -42,7 +42,7 @@
 				</nav>
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 					@if(auth()->user()->isTeacher() && !auth()->user()->confirmed)
-					<div class="alert alert-warning">Ваша учетная запись пока не прошла модерацию. До этого времени ваш профиль не будет виден другим пользователям. <a href="#">Как мне пройти модерацию?</a></div>
+					<div class="alert alert-warning">Ваша учетная запись пока не прошла модерацию. До этого времени ваш профиль не будет виден другим пользователям. <a href="{{route('teacher.info')}}">Как мне пройти модерацию?</a></div>
 					@endif
 					@if(session()->has('success'))
 					<div class="alert alert-success">{{session()->get('success')}}</div>
@@ -50,6 +50,11 @@
 					<div class="alert alert-succsss">{{session()->get('warning')}}</div>
 					@elseif(session()->has('error'))
 					<div class="alert alert-danger">{{session()->get('error')}}</div>
+					@endif
+					@if(session()->has('one'))
+						@if(session()->get('one') == 'register')
+							Написать что-то при успешной регистрации
+						@endif
 					@endif
 					@yield('content')
 				</main>

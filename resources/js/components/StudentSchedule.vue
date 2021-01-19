@@ -105,12 +105,12 @@ export default {
         })
     },
     mounted(){
-        this.channel = pusher.subscribe('schedule.' + this.teacher_id);
-        this.channel.bind('event', signal => {
-            if(signal.type == 'store') this.calendarOptions.events.push(signal.event)
-            else if(signal.type == 'update') this.$set(this.calendarOptions.events, this.calendarOptions.events.findIndex( e => e.id == signal.event.id), signal.event )
-            else if(signal.type == 'destroy') this.calendarOptions.events.splice(this.calendarOptions.events.findIndex( e => e.id == signal.event.id), 1 )
-        })
+        Echo.private("schedule-channel-" + this.teacher_id)
+        .listen('TeacherScheduleEvent', data => {
+            if(data.type == 'store') this.calendarOptions.events = [...this.calendarOptions.events, ...data.events ]
+            else if(data.type == 'update') this.$set(this.calendarOptions.events, this.calendarOptions.events.findIndex( e => e.id == data.event.id), data.event )
+            else if(data.type == 'destroy') this.calendarOptions.events.splice(this.calendarOptions.events.findIndex( e => e.id == data.event.id), 1 )
+        });
     },
 	methods: {
         updateCurrentTime() {

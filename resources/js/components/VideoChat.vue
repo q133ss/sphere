@@ -79,15 +79,8 @@ export default {
   },
   computed: {
     incomingCallDialog() {
-      if (
-        this.videoCallParams.receivingCall &&
-        this.videoCallParams.caller !== this.authuserid
-      ) {
-        return true;
-      }
-      return false;
+      return this.videoCallParams.receivingCall && this.videoCallParams.caller !== this.authuserid
     },
-
     callerDetails() {
       if (
         this.videoCallParams.caller &&

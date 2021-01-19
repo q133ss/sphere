@@ -35,4 +35,16 @@
             <div>Материалы</div>
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link text-center @if(Route::is('admin.posts.*')) active @endif" href="{{route('admin.posts.index')}}">
+            <i class="fa fa-file-pdf-o fa-lg"></i>
+            <div>Блог</div>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-center @if(Route::is('admin.faq.*')) active @endif" href="{{route('admin.faq.index')}}">
+            <i class="fa fa-file-pdf-o fa-lg"></i>
+            <div>FAQ</div>
+        </a>
+    </li>
 </ul>

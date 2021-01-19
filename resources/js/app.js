@@ -13,6 +13,7 @@ Vue.component('lesson', require('./components/Lesson.vue').default)
 Vue.component('teacher-schedule', require('./components/TeacherSchedule.vue').default)
 Vue.component('student-schedule', require('./components/StudentSchedule.vue').default)
 Vue.component('notifications', require('./components/Notifications.vue').default)
+Vue.component('tickets', require('./components/Tickets.vue').default)
 Vue.component("video-chat", require("./components/VideoChat.vue").default);
 import VueMoment from 'vue-moment'
 Vue.use(VueMoment, { moment })

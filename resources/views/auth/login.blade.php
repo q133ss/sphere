@@ -1,43 +1,57 @@
-@extends('layouts.site')
+@extends('layouts.auth')
 
 @section('content')
-<div class="card form-auth">
-    <div class="card-body">
-        <form action="{{ route('login') }}" method="post">
-            @csrf
-            <div class="text-center">
-                <img class="mb-4" src="/images/logo.png">
-                <h1 class="h3 mb-3 font-weight-normal">Авторизация</h1>
-            </div>
-            <div class="form-group">
-                <label class="sr-only">E-mail</label>
-                <input name="email" class="form-control @error('email') is-invalid @enderror" placeholder="E-mail" value="{{old('email')}}" required="" autofocus="">
-                @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label class="sr-only">Пароль</label>
-                <input name="password" type="password" class="form-control" placeholder="Пароль" required="">
-            </div>
-            <div class="checkbox mb-3">
-                <label>
-                <input name="remember" type="checkbox" value="remember-me" {{ old('remember') ? 'checked' : '' }}> Запомнить меня
-                </label>
-            </div>
-            <button class="btn btn btn-primary btn-block" type="submit">Войти</button>
-            <hr>
-            <div class="text-center">
-                @if (Route::has('password.request'))
-                    <a class="btn btn-link" href="{{ route('password.request') }}">Забыли пароль?</a>
-                @endif
-                @if (Route::has('register'))
-                    <a class="btn btn-link" href="{{ route('register') }}">Регистрация</a>
-                @endif
-            </div>
-        </form>
-    </div>
-</div>
+
+			<!-- 
+			=============================================
+				Signin Page
+			============================================== 
+			-->
+			<div class="signUp-page signUp-standard pt-250 pb-100 md-pt-200">
+				<div class="shape-wrapper">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div> <!-- /.shape-wrapper -->
+				<div class="signUp-illustration"><img src="images/home/sign-up.svg" alt=""></div>
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-7 ml-auto">
+							<div class="signin-form-wrapper">
+								<div class="title-area">
+									<h3>Войдите в сферу</h3>
+								</div> <!-- /.title-area -->
+								<form action="{{route('login')}}" id="login-form" method="post">
+                                    @csrf
+									<div class="row">
+										<div class="col-12">
+											<div class="input-group">
+												<input type="email" value="{{old('email')}}" name="email" required>
+												<label>Почта</label>
+											</div> <!-- /.input-group -->
+										</div> <!-- /.col- -->
+										<div class="col-12">
+											<div class="input-group">
+												<input type="password" name="password" required>
+												<label>Паролька</label>
+											</div> <!-- /.input-group -->
+										</div> <!-- /.col- -->
+									</div> <!-- /.row -->
+									<div class="agreement-checkbox d-flex justify-content-between align-items-center">
+										<div>
+											<input type="checkbox" id="remember" name="remember">
+											<label for="remember">Запомнить меня</label>
+										</div>
+										<a href="{{route('password.request')}}">Забыли парольку?</a>
+									</div>
+									<button class="theme-btn solid-button-one button-rose radius3">Войти</button>
+								</form>
+								<p class="signUp-text">У Вас еще нет нашего аккаунта? <a href="{{route('register')}}">Создать</a> сейчас.</p>
+							</div> <!-- /.signin-form-wrapper -->
+						</div>
+					</div>
+				</div>
+			</div> <!-- /.signUp-page -->
 @endsection

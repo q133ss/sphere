@@ -7,12 +7,17 @@ use App\Ticket;
 class TicketController extends Controller
 {
     public function index(){
-        $tickets = auth()->user()->tickets()->paginate(25);
-        return view('tickets.index', compact('tickets'));
+        $tickets = auth()->user()->isAdmin() ? Ticket::all() : auth()->user()->tickets()->get();
+        return $tickets;
     }
-    public function show(Ticket $ticket){
-        $ticket->load(['messages']);
-        return view('tickets.show', compact('ticket'));
+    public function store(Request $request){
+        $request->validate([
+            'text' => 'required'
+        ]);
+        $data = $request->only('text');
+        $data['user_id'] = auth()->id();
+        $ticket = Ticket::create($data);
+        return $ticket;
     }
     public function reply(Request $request, Ticket $ticket){
         $text = $request->text;

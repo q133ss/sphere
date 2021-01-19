@@ -1,90 +1,86 @@
 @extends('layouts.site')
 
 @section('content')
-<div class="card form-auth">
-    <div class="card-body">
-        <form action="{{ route('register') }}" method="post">
-            @csrf
-            <div class="text-center">
-                <img class="mb-4" src="/images/logo.png">
-                <h1 class="h3 mb-3 font-weight-normal">Регистрация</h1>
+<div class="signUp-page signUp-standard pt-225 pb-100 md-pt-200">
+    <div class="shape-wrapper">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div> <!-- /.shape-wrapper -->
+    <div class="signUp-illustration"><img src="images/home/sign-up.svg" alt=""></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 ml-auto">
+                <div class="sign-up-form-wrapper">
+                    <div class="title-area">
+                        <h3>Создайте аккаунт</h3>
+                        <p>Пожалуйста внимательно заполните все поля, и прочтите условия предоставления услуг Образовательной сферы.</p>
+                    </div> <!-- /.title-area -->
+                    <p class="or-text"><span>Регистрация</span></p>
+
+                    <form action="#" id="signUp-form">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" value="{{old('surname')}}" name="surname" required>
+                                    <label>Фамилия</label>
+                                </div> <!-- /.input-group -->
+                            </div> <!-- /.col- -->
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" value="{{old('name')}}" name="name" required>
+                                    <label>Имя</label>
+                                </div> <!-- /.input-group -->
+                            </div> <!-- /.col- -->
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" value="{{old('lastname')}}" name="lastname" required>
+                                    <label>Отчество</label>
+                                </div> <!-- /.input-group -->
+                            </div> <!-- /.col- -->
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="email" value="{{old('email')}}" name="email" required>
+                                    <label>Почта</label>
+                                </div> <!-- /.input-group -->
+                            </div> <!-- /.col- -->
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="password" name="password" required>
+                                    <label>Паролька</label>
+                                </div> <!-- /.input-group -->
+                            </div> <!-- /.col- -->
+                        </div> <!-- /.row -->
+
+                        <div class="acType-content">
+                            <h4>Выберите Вашу роль.</h4>
+                            <p>Вы преподаватель или ученик?</p>
+                            <ul class="acType-list">
+                                <li>
+                                    <div>
+                                        <input type="radio" name="role" value="student" id="student">
+                                        <label for="student">Я ученик</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <input type="radio" name="role" value="teacher" id="teacher">
+                                        <label for="teacher">Я преподаватель</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div> <!-- /.acType-content -->
+                        <div class="agreement-checkbox">
+                            <input type="checkbox" id="agreement">
+                            <label for="agreement">«Я прочитал(-а) Условия соглашения и согласен(-на) с условиями»</label>
+                        </div>
+                        <button class="theme-btn solid-button-one button-rose radius3">Регистрация</button>
+                    </form>
+                </div> <!-- /.sign-up-form-wrapper -->
             </div>
-            <div class="form-group">
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="student" name="role_id" value="2" class="custom-control-input" checked>
-                    <label class="custom-control-label" for="student">Я ученик</label>
-                </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="teacher" name="role_id" value="3" class="custom-control-input">
-                    <label class="custom-control-label" for="teacher">Я преподаватель</label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="sr-only">Фамилия</label>
-                <input name="surname" class="form-control @error('surname') is-invalid @enderror" placeholder="Фамилия" value="{{old('surname')}}" required="">
-                @error('surname')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label class="sr-only">Имя</label>
-                <input name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Имя" value="{{old('name')}}" required="">
-                @error('name')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label class="sr-only">Отчество</label>
-                <input name="lastname" class="form-control @error('lastname') is-invalid @enderror" placeholder="Отчество" value="{{old('lastname')}}" required="">
-                @error('lastname')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label class="sr-only">Телефон</label>
-                <input name="phone" class="form-control phone @error('phone') is-invalid @enderror" placeholder="Телефон" value="{{old('phone')}}">
-                @error('phone')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label class="sr-only">E-mail</label>
-                <input name="email" class="form-control @error('email') is-invalid @enderror" placeholder="E-mail" value="{{old('email')}}" required="">
-                @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label class="sr-only">Пароль</label>
-                <input name="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Пароль" required="">
-                @error('password')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label class="sr-only">Парль еще раз</label>
-                <input name="password_confirmation" type="password" class="form-control" placeholder="Парль еще раз" required="">
-            </div>
-            <button class="btn btn btn-primary btn-block" type="submit">Зарегистрироваться</button>
-            <hr>
-            <div class="text-center">
-                @if (Route::has('login'))
-                    <a class="btn btn-link" href="{{ route('login') }}">Вход</a>
-                @endif
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</div> <!-- /.signUp-page -->
 @endsection

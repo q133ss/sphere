@@ -60,7 +60,7 @@ class LessonController extends Controller
         }
     }
     public function done(Lesson $lesson){
-        if($lesson->done) return false;
+        if($lesson->status == 'success') return false;
         $lesson->status = 'success';
         $lesson->save();
         $teacher = $lesson->teacher;

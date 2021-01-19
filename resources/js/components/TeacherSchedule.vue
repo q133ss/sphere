@@ -1,9 +1,6 @@
 <template>
     <div>
-        <p class="text-danger"><i class="fa fa-info f-lg"></i> Обратите внимание на текущее время {{currentTime}}, если оно не соответствует вашему часовому поясу, то выберите его из списка</p>
-        <select class="form-control col-md-3 mb-3" @change="updateCurrentTime" v-model="zone">
-            <option v-for="zone in zones" :key="zone" :value="zone">{{zone}}</option>
-        </select>
+        <gmt></gmt>
         <FullCalendar :options="calendarOptions">
             <template #eventContent="{ timeText, event }">
                 <b>{{ timeText }}</b>
@@ -42,18 +39,15 @@ import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import '@fullcalendar/core/locales/ru'
-
+import gmt from './Gmt';
 export default {
-    props: ['teacher_id'],
-    components: { FullCalendar },
+    props: ['teacher_id', 'gmt'],
+    components: { FullCalendar, gmt },
     data() {
         return {
             model: {},
             calendarApi: false,
-            currentTime: '',
             channel: false,
-            zones: moment.tz.names(),
-            zone: 'Europe/Moscow',
             calendarOptions: {
                 locale: 'ru',
                 firstDay: 1,
@@ -77,7 +71,7 @@ export default {
                 },
                 allDaySlot: false,
                 events: [],
-                editable: true,
+                editable: false,
                 selectable: true,
                 selectMirror: false,
                 dayMaxEvents: false,
@@ -85,32 +79,31 @@ export default {
                 select: this.save,
                 eventClick: this.showEvent,
                 eventChange: this.save,
-                viewRender: this.test,
-                chngeView: this.test
             }
         }
     },
     async created(){
-        this.updateCurrentTime()
-        setInterval(this.updateCurrentTime, 60 * 1000);
         await this.fetchEvents({
             startStr: moment().startOf('week').format(),
             endStr: moment().endOf('week').format()
         })
     },
     mounted(){
-        this.channel = pusher.subscribe('schedule.' + this.teacher_id);
-        this.channel.bind('event', signal => {
-            if(signal.type == 'update') this.$set(this.calendarOptions.events, this.calendarOptions.events.findIndex( e => e.id == signal.event.id), signal.event )
-        })
+        // this.channel = window.Echo.join("presence-schedule-channel-" + this.teacher_id);
+        // Echo.private("presence-schedule-channel-" + this.teacher_id)
+        // .listen('store', data => {
+        //     console.log(data);
+        // });
+        // this.channel = pusher.subscribe('schedule.' + this.teacher_id);
+        // this.channel.bind('event', signal => {
+        //     if(signal.type == 'update') this.$set(this.calendarOptions.events, this.calendarOptions.events.findIndex( e => e.id == signal.event.id), signal.event )
+        // })
     },
 	methods: {
         test(data){
             console.log(data);
         },
-        updateCurrentTime() {
-            this.currentTime = moment().format("HH:mm");
-        },
+        
         async destroy(){
             if(!confirm('Подтвердите удаление')) return false;
             try{
@@ -121,13 +114,13 @@ export default {
         },
         async save(info){
             const start = moment(info.event ? info.event.start : info.start).format('YYYY-MM-DD HH:mm:00')
-            const end = moment(start).add(1, 'hours').format('YYYY-MM-DD HH:mm:00')
+            const end = moment(info.event ? info.event.end : info.end).format('YYYY-MM-DD HH:mm:00')
             const model = { start, end }
             try{
                 if(info.event) await axios.put('/teacher_dashboard/schedule/' + info.event.id, model)
                 else{
                     const {data} = await axios.post('/teacher_dashboard/schedule', model)
-                    this.calendarOptions.events = [...this.calendarOptions.events, ...[data]]
+                    this.calendarOptions.events = [...this.calendarOptions.events, ...data]
                 }
             }catch(e){}
             finally{ this.model = {}}

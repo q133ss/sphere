@@ -15,11 +15,11 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->text('text');
-            $table->text('reply');
             $table->boolean('read')->default(0);
             $table->string('name');
             $table->string('email');
+            $table->string('phone')->nullable();
+            $table->text('text');
             $table->timestamps();
         });
     }

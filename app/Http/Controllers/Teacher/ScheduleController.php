@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Events\TeacherScheduleEvent;
 use App\Event;
+use Carbon\Carbon;
 class ScheduleController extends Controller
 {
     public function index(Request $request){
@@ -24,14 +25,24 @@ class ScheduleController extends Controller
             'start' => 'required|date',
             'end' => 'required|date'
         ]);
-        $event = Event::create([
-            'teacher_id' => auth()->id(),
-            'start' => $request->start,
-            'end' => $request->end
-        ]);
-        event(new TeacherScheduleEvent('store', $event));
-        $event->load(['student:id,name', 'teacher:id,name', 'subject']);
-        return $event;
+        $events = [];
+        $start = Carbon::parse($request->start);
+        $end = Carbon::parse($request->end);
+        $teacher_id = auth()->id();
+        $diff = $end->diffInHours($start);
+        while($diff--){
+            $event = Event::create([
+                'teacher_id' => $teacher_id,
+                'start' => $start->format('Y-m-d H:i:00'),
+                'end' => $start->addHour()->format('Y-m-d H:i:00')
+            ]);
+            $event->student = null;
+            $event->subject = null;
+            $event->load(['teacher:id,name']);
+            $events[] = $event;
+        }
+        broadcast(new TeacherScheduleEvent($teacher_id, 'store', $events))->toOthers();
+        return $events;
     }
     public function update(Request $request, $id){
         $event = Event::findOrFail($id);
@@ -46,7 +57,6 @@ class ScheduleController extends Controller
     }
     public function destroy($id){
         $event = Event::findOrFail($id);
-        event(new TeacherScheduleEvent('destroy', $event));
         $event->delete();
     }
 }
