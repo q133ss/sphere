@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Carbon\Carbon;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -55,12 +55,18 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
     public function notifications(){
-        return $this->hasMany(Notification::class);
+        return $this->hasMany(Notification::class)->latest();
     }
     public function subjects(){
         return $this->belongsToMany(Subject::class);
     }
     public function tickets(){
         return $this->hasMany(Ticket::class);
+    }
+    public function subscribes(){
+        return $this->hasMany(Subscribe::class);
+    }
+    public function activeSubscribe(){
+        return $this->subscribes()->where('end', '>=', Carbon::now());
     }
 }

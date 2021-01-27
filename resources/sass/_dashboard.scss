@@ -1,4 +1,19 @@
-
+.navbar-brand{
+  transition: 0.3s all;
+  overflow: hidden;
+}
+.sidebar-active{
+  .sidebar, .navbar-brand{ width: 64px; }
+  main{ width: calc(100% - 64px); }
+  &.sidebar-open{
+      .sidebar, .navbar-brand{ width: 16.667%; }
+      main{ width: 83.333%; }
+  }
+}
+main{
+  width: 100%;
+  transition: 0.3s all;
+}
   .sidebar {
     position: fixed;
     top: 0;
@@ -7,14 +22,27 @@
     z-index: 100; /* Behind the navbar */
     padding: 48px 0 0; /* Height of navbar */
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-  }
-  
-  @media (max-width: 767.98px) {
-    .sidebar {
-      top: 5rem;
+    background-color: #fff;
+    width: 0;
+    overflow: hidden;
+    transition: 0.3s all;
+    .nav-link{
+      padding-left: 0;
+      padding-right: 0;
+      color: #999;
+      overflow: hidden;
+      white-space: nowrap;
+      &.active{
+        background-color: #999;
+        color: #fff;
+      }
+      .icon{
+        width: 64px;
+        text-align: center;
+        display: inline-block;
+      }
     }
   }
-  
   .sidebar-sticky {
     position: relative;
     top: 0;
@@ -30,31 +58,19 @@
       position: sticky;
     }
   }
-  
-  .sidebar .nav-link {
-    font-weight: 500;
-    color: $teal;
-  }
-  .sidebar .nav-link.active,.sidebar .nav-link:hover {
-    color: #007bff;
-  }
-  .sidebar-heading {
-    font-size: .75rem;
-    text-transform: uppercase;
-  }
+
   nav.navbar-dark{
     -webkit-box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.45); 
     box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.45);
   }
   nav.navbar-dark .nav-link{
-    color: $teal;
+    color: #fff;
   }
 .dashboard{
   .navbar-brand {
     padding-top: .75rem;
     padding-bottom: .75rem;
     font-size: 1rem;
-    background-color: $teal;
     color: #fff;
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
   }
@@ -62,5 +78,36 @@
   .navbar .navbar-toggler {
     top: .25rem;
     right: 1rem;
+  }
+  .avatar{
+    vertical-align: middle;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: inline-block;
+  }
+}
+.card.veh .card-body{
+  height: 128px;
+  text-align: center;
+  .veh-title{
+    width: 100%;
+    font-size: 1.4em;
+    font-weight: 300;
+    margin-bottom: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .veh-value{
+    color: $info;
+    font-weight: bold;
+    font-size: 2em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }

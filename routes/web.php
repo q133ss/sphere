@@ -15,6 +15,7 @@ Route::get('/posts/{post}', 'HomeController@post')->name('posts.show');
 Route::group([
     'middleware' => ['auth']
 ], function(){
+    Route::delete('/lessons/deleteFile/{id}', 'LessonController@deleteFile');
     Route::get('/materials', function(){ return App\Material::all(); });
     Route::post('/profile', 'UserController@update')->name('profile.update');
     Route::post('/profile/photo', 'UserController@uploadPhoto')->name('profile.uploadPhoto');
@@ -30,8 +31,8 @@ Route::group([
     Route::post('/tickets/{ticket}/close', 'TicketController@close');
     Route::apiResource('/tickets', 'TicketController')->only(['index', 'store']);
     
-    // Route::post('/pusher/auth', 'PusherController@auth');
-    // Route::post('/pusher/lessons/{lesson}/message', 'PusherController@lessonMessage');
+    Route::post('/pusher/auth', 'PusherController@auth');
+    Route::post('/pusher/lessons/{lesson}/message', 'PusherController@lessonMessage');
     
     Route::post('/notifications/read', 'NotificationController@read');
     Route::get('/notifications', 'NotificationController@index');
@@ -95,6 +96,8 @@ Route::group([
     Route::view('/info', 'teacher.info')->name('info');
     Route::get('/profile', 'UserController@showProfile')->name('profile');
     Route::get('/students', 'UserController@showStudents')->name('students.index');
+    Route::post('/subscribe', 'SubscribeController@store')->name('subscribe.store');
+    Route::get('/subscribe', 'SubscribeController@index')->name('subscribe.index');
     Route::apiResource('/schedule', 'ScheduleController');
     Route::resource('/lessons', 'LessonController')->only(['index', 'show']);
 });

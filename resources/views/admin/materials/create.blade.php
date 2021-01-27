@@ -23,44 +23,32 @@
         <form action="{{route('admin.materials.store')}}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row">
-                <div class="col"><div class="form-group"><input type="text" name="name" placeholder="Название" required class="form-control"></div></div>
                 <div class="col">
-                    <select name="subject_id" class="form-control" placeholder="Предмет" required>
-                        <option disabled selected value=""></option>
-                        @foreach($subjects as $subject)<option value="{{$subject->id}}">{{$subject->name}}</option>@endforeach
-                    </select>
+                    <div class="form-group"><input type="text" name="name" placeholder="Название" required class="form-control"></div>
+                    <div class="form-group">
+                        <select name="subject_id" class="form-control" placeholder="Предмет" required>
+                            <option disabled selected value="">Предмет</option>
+                            @foreach($subjects as $subject)<option value="{{$subject->id}}">{{$subject->name}}</option>@endforeach
+                        </select>
+                    </div>
                 </div>
-                <div class="col"><div class="form-group"><input type="number" min="0" name="price" placeholder="Цена" class="form-control"></div></div>
                 <div class="col">
-                    <select name="available" class="form-control">
-                        <option selected value="free">Бесплатно</option>
-                        <option value="subscribe">Подписка</option>
-                        <option value="payment">Покупка</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
                     <div class="form-group">
                         <div class="custom-file">
-                            <input multiple name="book[]" type="file" class="custom-file-input" id="f1">
+                            <input name="book" type="file" class="custom-file-input simple-file" id="f1">
                             <label class="custom-file-label" for="f1">Учебники</label>
                             @error('book[]')<div class="invalid-feedback">{{$message}}</div>@enderror
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
                     <div class="form-group">
                         <div class="custom-file">
-                            <input multiple name="workbook[]" type="file" class="custom-file-input" id="f2">
+                            <input name="workbook" type="file" class="custom-file-input simple-file" id="f2">
                             <label class="custom-file-label" for="f2">Рабочие тетради</label>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
                     <div class="form-group">
                         <div class="custom-file">
-                            <input multiple name="media[]" type="file" class="custom-file-input" id="f3">
+                            <input multiple name="media[]" type="file" class="custom-file-input simple-file" id="f3">
                             <label class="custom-file-label" for="f3">Медиа</label>
                         </div>
                     </div>

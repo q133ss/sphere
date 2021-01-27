@@ -6,8 +6,11 @@
         </div>
         <div v-else class="dropdown-menu notifications-menu">
             <li v-for="(notify, i) in notifications" :key="notify.id" class="dropdown-item d-flex justify-content-between align-items-center">
-                <span>{{notify.text}}</span>
-                <button class="btn btn-sm btn-danger" @click.stop="destroy(notify.id, i)"><i class="fa fa-trash"></i></button>
+                <div>
+                    <div class="small text-muted">{{notify.created_at | moment('DD.MM.YYYY HH:mm')}}</div>
+                    <div>{{notify.text}}</div>
+                </div>
+                <button class="btn btn-sm btn-danger" @click.stop="destroyNotification(notify.id)"><i class="fa fa-trash"></i></button>
             </li>
         </div>
     </div>

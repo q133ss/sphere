@@ -9,20 +9,27 @@
 	<meta name="auth" content="{{ auth()->id() }}">
     <title>@yield('title', 'Личный кабинет')</title>
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 	<script src="{{ asset('js/app.js') }}" defer></script>
 </head>
-<body class="dashboard">
+<body class="dashboard sidebar-active sidebar-open">
 	<div id="app">
 		<header>
-			<nav class="bg-light navbar-dark fixed-top d-flex justify-content-between align-items-center">
-				<a class="navbar-brand col-md-2 col-4" href="{{route('home')}}">Сфера</a>
-				<nav class="nav">
+			<nav class="bg-info navbar-dark fixed-top d-flex justify-content-between align-items-center">
+				<a class="navbar-brand pl-2" href="{{route('home')}}">
+					<span class="d-inline-block text-center mr-2" style="width: 64px"><img src="/images/1.svg" width="32px" height="32px" alt="Сфера"></span>
+                    Сфера
+				</a>
+				<nav class="nav align-items-center">
 					@if(!auth()->user()->isAdmin())<a class="nav-link" href="{{route(auth()->user()->role->name . '.payments.index')}}">Мой счет: {{auth()->user()->balance}} <i class="fa fa-rub"></i></a>@endif
 					<notifications user_id="{{auth()->id()}}"></notifications>
 					<div class="dropdown" href="#">
-						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{auth()->user()->name}}</a>
+						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+							@if(auth()->user()->photo)
+							<span class="avatar" style="background-image: url({{auth()->user()->photo}})"></span>
+							@endif
+							{{auth()->user()->full_name}}
+						</a>
 						<div class="dropdown-menu">
 							<a href="{{route(auth()->user()->role->name.'.profile')}}" class="dropdown-item">Профиль</a>
 							<div class="dropdown-divider"></div>
@@ -30,17 +37,18 @@
 							<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
 						</div>
 					</div>
+					<!-- <div class="nav-item"><a href="#" class="nav-link sidebar-toggle"><i class="fa fa-bars"></i></a></div> -->
 				</nav>
 			</nav>
 		</header>
 		<div class="container-fluid">
-			<div class="row">
-				<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+			<div class="row justify-content-end">
+				<nav class="sidebar">
 					<div class="sidebar-sticky">
 						@include('layouts.navs.'.auth()->user()->role->name)
 					</div>
 				</nav>
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				<main role="main" class="px-1">
 					@if(auth()->user()->isTeacher() && !auth()->user()->confirmed)
 					<div class="alert alert-warning">Ваша учетная запись пока не прошла модерацию. До этого времени ваш профиль не будет виден другим пользователям. <a href="{{route('teacher.info')}}">Как мне пройти модерацию?</a></div>
 					@endif

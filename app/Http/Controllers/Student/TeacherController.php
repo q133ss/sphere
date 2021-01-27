@@ -39,11 +39,13 @@ class TeacherController extends Controller
         $event->student_id = auth()->id();
         $event->subject_id = $request->subject_id;
         $event->save();
-        auth()->user()->balance -= $teacher->lesson_price;
-        auth()->user()->save();
-        auth()->user()->teachers()->attach($id, [
-            'subject_id' => $request->subject_id
-        ]);
+        $user = auth()->user();
+        $user->balance -= $teacher->lesson_price;
+        $user->save();
+        if(!$user->teachers->contains($id))
+            $user->teachers()->attach($id, [
+                'subject_id' => $request->subject_id
+            ]);
         $payment = Payment::create([
             'user_id' => auth()->id(),
             'amount' => $teacher->lesson_price,
@@ -61,7 +63,7 @@ class TeacherController extends Controller
         ]);
         session()->flash('success', 'Вы успешно записались на урок');
         event(new UserNotificationEvent($id, 'У вас появился новый ученик'));
-        event(new TeacherScheduleEvent('update', $event));
+        event(new TeacherScheduleEvent($id, 'update', $event));
     }
     public function unsubscribe(Request $request, $id){
         $teacher = User::findOrFail($id);
@@ -69,9 +71,10 @@ class TeacherController extends Controller
         $event->student_id = null;
         $event->subject_id = null;
         $event->save();
-        auth()->user()->balance += $teacher->lesson_price;
-        auth()->user()->save();
-        auth()->user()->teachers()->dettach($id);
+        $user = auth()->user();
+        $user->balance += $teacher->lesson_price;
+        $user->save();
+        // $user->teachers()->dettach($id);
         $lesson = $event->lesson;
         $lesson->payment->delete();
         session()->flash('success', 'Вы успешно отписались от урока');

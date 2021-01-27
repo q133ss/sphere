@@ -16,8 +16,6 @@ class CreateMaterialsTable extends Migration
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('available', ['subscribe', 'payment', 'free'])->default('free');
-            $table->float('price')->unsigned()->nullable();
             $table->bigInteger('subject_id')->unsigned()->nullable();
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('set null');
         });

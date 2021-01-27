@@ -39,6 +39,7 @@
         "pusher-js": "^7.0.2",
         "simple-peer": "^9.9.3",
         "vue-moment": "^4.1.0",
+        "vue-toast-notification": "^0.6.0",
         "wc-air-datepicker": "^0.3.0"
     }
 }

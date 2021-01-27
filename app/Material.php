@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Material extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['name', 'price', 'available', 'subject_id'];
+    protected $fillable = ['name', 'subject_id'];
     public function files(){
         return $this->morphMany(File::class, 'fileable');
     }

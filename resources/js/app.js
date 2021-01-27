@@ -4,6 +4,12 @@ require('./board')
 window.Vue = require('vue')
 window.moment = require('moment-timezone')
 require('moment/locale/ru')
+import VueToast from 'vue-toast-notification';
+//import 'vue-toast-notification/dist/theme-default.css';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
+
 Vue.component('profile-photo', require('./components/ProfilePhoto.vue').default)
 Vue.component('profile-docs', require('./components/ProfileDocuments.vue').default)
 Vue.component('lesson', require('./components/Lesson.vue').default)
@@ -20,8 +26,10 @@ Vue.use(VueMoment, { moment })
 const app = new Vue({
     el: '#app',
 });
+let ww;
 
 $(document).ready(function(){
+    ww = $(window).width()
     $('.phone').mask('+7 000-000-00-00')
     $('[data-toggle="tooltip"]').tooltip()
     $('form.confirm').on('submit', function(e){
@@ -36,4 +44,22 @@ $(document).ready(function(){
         if(count > 0) text += ' (+'+count+')'
         $(this).next().html(text)
     })
+    $('.sidebar-toggle').click(function(e){
+        e.preventDefault();
+        toggleSidebar()
+    })
+    // $(window).resize(function(e){
+    //     ww = $(window).width()
+    //     if(ww < 991 && $('body').hasClass('sidebar-open'))
+    //     $('body').removeClass('sidebar-open')
+    // })
+    // toggleSidebar()
 })
+
+function toggleSidebar(){
+    if(ww > 991){
+        $('body').addClass('sidebar-active').toggleClass('sidebar-open')
+    }else{
+        $('body').removeClass('sidebar-open').toggleClass('sidebar-active')
+    }
+}

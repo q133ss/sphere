@@ -74,14 +74,14 @@
 			-->
 			<div class="theme-main-menu theme-menu-one sticky-menu">
 				<div class="d-flex align-items-center">
-					<div class="logo mr-auto"><a href="index.html"><img src="/images/logo/logo.png" alt=""></a></div>
+					<div class="logo mr-auto"><a href="{{route('home')}}"><img src="/images/logo/logo.png" alt=""></a></div>
 
 					<div class="right-content order-lg-3">
 						<ul class="d-flex align-items-center">
 							@guest
 							<li class="action-list-item"><a href="{{route('login')}}" class="theme-btn line-button-one contact-button">Войти</a></li>
 							@else
-							<li class="action-list-item"><a href="{{auth()->user()->role->name . '_dashboard'}}" class="theme-btn line-button-one contact-button">{{auth()->user()->name}}</a></li>
+							<li class="action-list-item"><a href="/{{auth()->user()->role->name . '_dashboard'}}" class="theme-btn line-button-one contact-button">{{auth()->user()->name}}</a></li>
 							@endguest
 						</ul>
 					</div>

@@ -1,6 +1,18 @@
 <template>
 <div class="card mb-1">
-  <div class="card-header p-1">Видеотрансляция</div>
+  <div class="card-header p-1">
+    Видеотрансляция
+    <div class="float-right">
+      <div v-if="callPlaced">
+        <button type="button" class="btn mx-1 btn-sm btn-info" @click="toggleMuteAudio"><i class="fa" :class="{ 'fa-microphone': !mutedAudio, 'fa-microphone-slash': mutedAudio}"></i></button>
+        <button type="button" class="btn mx-1 btn-sm btn-primary" @click="toggleMuteVideo"><i class="fa" :class="{ 'fa-eye': !mutedVideo, 'fa-eye-slash': mutedVideo}"></i></button>
+        <button type="button" class="btn mx-1 btn-sm btn-danger" @click="endCall"><i class="fa fa-times"></i></button>
+      </div>
+      <div v-else>
+        <button type="button" class="btn btn-sm btn-success" v-for="user in allusers" :key="user.id" @click="placeVideoCall(user.id, user.name)"><i class="fa fa-volume-control-phone"></i> {{ user.name }} <span class="badge badge-light">{{getUserOnlineStatus(user.id)}}</span></button>
+      </div>
+    </div>
+  </div>
   <div class="card-body p-1">
     <div id="lesson-video-container" class="position-relative">
       <div v-if="callPlaced">
@@ -22,16 +34,6 @@
             <button type="button" class="btn btn-sm btn-success" @click="acceptCall">Принять</button>
           </div>
       </div>
-    </div>
-  </div>
-  <div class="card-footer p-1">
-    <div v-if="callPlaced">
-      <button type="button" class="btn btn-s, btn-info" @click="toggleMuteAudio"><i class="fa" :class="{ 'fa-microphone': !mutedAudio, 'fa-microphone-slash': mutedAudio}"></i></button>
-      <button type="button" class="btn btn-s, btn-primary mx-4" @click="toggleMuteVideo"><i class="fa" :class="{ 'fa-eye': !mutedVideo, 'fa-eye-slash': mutedVideo}"></i></button>
-      <button type="button" class="btn btn-s, btn-danger" @click="endCall"><i class="fa fa-times"></i></button>
-    </div>
-    <div v-else>
-      <button type="button" class="btn btn-sm btn-success" v-for="user in allusers" :key="user.id" @click="placeVideoCall(user.id, user.name)"><i class="fa fa-volume-control-phone"></i> {{ user.name }} <span class="badge badge-light">{{getUserOnlineStatus(user.id)}}</span></button>
     </div>
   </div>
 </div>
@@ -123,6 +125,7 @@ export default {
 
       this.videoCallParams.channel.joining((user) => {
         // check user availability
+        this.$toast.success(user.name + ' присоединился к уроку')
         const joiningUserIndex = this.videoCallParams.users.findIndex(
           (data) => data.id === user.id
         );
@@ -132,6 +135,7 @@ export default {
       });
 
       this.videoCallParams.channel.leaving((user) => {
+        this.$toast.warning(user.name + ' покинул урок')
         const leavingUserIndex = this.videoCallParams.users.findIndex(
           (data) => data.id === user.id
         );

@@ -1,9 +1,5 @@
 <template>
     <div>
-        <p class="text-danger"><i class="fa fa-info f-lg"></i> Обратите внимание на текущее время {{currentTime}}, если оно не соответствует вашему часовому поясу, то выберите его из списка</p>
-        <select class="form-control col-md-3 mb-3" @change="updateCurrentTime" v-model="zone">
-            <option v-for="zone in zones" :key="zone" :value="zone">{{zone}}</option>
-        </select>
         <FullCalendar :options="calendarOptions">
             <template #eventContent="{ timeText, event }">
                 <b>{{ timeText }}</b>
@@ -24,7 +20,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <select :disabled="model.student_id" required class="form-control" v-model="model.subject_id">
-                            <option disabled value="null">Выберите предмет</option>
+                            <option selected disabled value="null">Выберите предмет</option>
                             <option :value="subject.id" v-for="subject in teacher.subjects" :key="subject.id">{{subject.name}}</option>
                         </select>
                     </div>

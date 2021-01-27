@@ -20,23 +20,17 @@ class MaterialController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'nullable|numeric|min:0',
-            'book' => 'array|max:3',
-            'workbook' => 'array|max:5',
             'media' => 'array|max:25',
             'media.*' => 'mimes:audio/mpeg,mpga,mp3,wav',
-            'book.*' => 'mimes:pdf',
-            'workbook.*' => 'mimes:pdf'
+            'book' => 'file|mimes:pdf|max:8192',
+            'workbook' => 'file|mimes:pdf||max:8192'
         ]);
         $material = Material::create($request->only(['name', 'price', 'available', 'subject_id']));
         if($request->has('book')){
-            foreach($request->book as $file){
-                $material->files()->create($this->getFileItem($file, 'book', $material->id));
-            }
+            $material->files()->create($this->getFileItem($request->file('book'), 'book', $material->id));
         }
         if($request->has('workbook')){
-            foreach($request->workbook as $file){
-                $material->files()->create($this->getFileItem($file, 'workbook', $material->id));
-            }
+            $material->files()->create($this->getFileItem($request->file('workbook'), 'workbook', $material->id));
         }
         if($request->has('media')){
             foreach($request->media as $file){

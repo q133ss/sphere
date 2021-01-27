@@ -10,13 +10,22 @@
 						<div class="card-header p-1">
 							<!-- <button class="btn btn-sm btn-primary">Новая доска</button> -->
 							<div class="float-left">
-                                <button class="btn btn-secondary btn-sm mx-1" @click="clear" v-if="role == 'teacher'">Очистить</button>
-                                <button class="btn btn-sm btn-primary" @click="showMaterialModal" v-if="role == 'teacher'"><i class="fa fa-plus"></i></button>
-                                <div class="btn-group ml-2">
+                                <button class="btn btn-sm mr-1" @click="clear" v-if="role == 'teacher'"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-sm btn-primary" @click="materialsListActive = !materialsListActive" v-if="role == 'teacher'"><i class="fa fa-upload"></i></button>
+                                <div class="btn-group ml-3">
                                     <button class="btn btn-sm" @click="canvasUndo"><i class="fa fa-undo"></i></button>
                                     <button class="btn btn-sm" :class="{'btn-primary': canvasMode == 'draw'}" @click="setCanvasMode('draw')"><i class="fa fa-pencil"></i></button>
-                                    <button class="btn btn-sm" :class="{'btn-primary': canvasMode == 'select'}" @click="setCanvasMode('select')"><i class="fa fa-hand-pointer-o"></i></button>
+                                    <button class="btn btn-sm" :class="{'btn-primary': canvasMode == 'select'}" @click="setCanvasMode('select')"><i class="fa fa-arrows"></i></button>
                                     <button class="btn btn-sm" :class="{'btn-primary': canvasMode == 'write'}" @click="setCanvasMode('write')"><i class="fa fa-font"></i></button>
+                                    <button class="btn btn-sm" :class="{'btn-primary': canvasMode == 'eraser'}" @click="setCanvasMode('eraser')"><i class="fa fa-eraser"></i></button>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm" data-toggle="dropdown" :style="{background: canvasColor}">&nbsp;</button>
+                                        <div class="dropdown-menu">
+                                            <div class="dropdown-item">
+                                                <button class="btn btn-sm mx-1" v-for="color in canvasColors" :key="color" @click="setCanvasColor(color)" :style="{background: color}">&nbsp;</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="float-right">
@@ -25,17 +34,18 @@
                             </div>
 						</div>
 						<div class="board-container" ref="boardContainer">
-							<canvas class="board-canvas" ref="boardCanvas"></canvas>
-						</div>
-                        <div class="materials">
-                            <div class="dropdown" v-for="file in lesson.files" :key="file.id">
-                                <div class="card" data-toggle="dropdown" :style="{backgroundImage: 'url(/storage/' + file.src + ')'}"></div>
-                                <div class="dropdown-menu dropup">
-                                    <a href="" class="dropdown-item dropdown-item-action" @click.prevent="destroyFile(file)">Удалить</a>
-                                    <a href="" class="dropdown-item dropdown-item-action" @click.prevent="imgToCanvas(file)">На доску</a>
+                            <div class="materials-list d-flex align-items-center" :class="{active: materialsListActive}" v-if="lesson">
+                                <button class="btn btn-primary btn-lg mx-3" @click="showUploadModal"><i class="fa fa-plus"></i></button>
+                                <div class="card" :style="{backgroundImage: 'url(/storage/' + file.src + ')'}" v-for="file in lesson.files" :key="file.id">
+                                    <div class="buttons">
+                                        <button class="btn btn-sm btn-danger" @click.prevent="destroyFile(file)"><i class="fa fa-trash"></i></button>
+                                        <button v-if="!file.category || file.category == 'book'" class="btn btn-sm btn-success" @click.prevent="imgToCanvas(file)"><i class="fa fa-plus"></i></button>
+                                        <button v-if="file.category == 'media'" class="btn btn-sm btn-success" @click.prevent="play(file)"><i class="fa" :class="{'fa-play': !soundID, 'fa-pause': soundID == file.id}"></i></button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+							<canvas class="board-canvas" ref="boardCanvas"></canvas>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -45,7 +55,7 @@
 							<ul v-if="messages.length">
 								<li v-for="message in messages" :key="message.id" :class="{right: message.user.id == lesson.student_id}">
 									<span>
-										<i class="small">{{message.user.name}}</i> <time class="small">{{message.created_at | moment('DD.MM.YYYY HH:mm')}}</time><br>
+										<p class="mb-1"><i class="small">{{message.user.name}}</i> <time class="small">{{message.created_at | moment('DD.MM.YYYY HH:mm')}}</time></p>
 										{{message.text}}
 									</span>
 								</li>
@@ -64,7 +74,7 @@
 				</div>
 			</div>
         </div>
-        <div class="modal" tabindex="-1" role="dialog" id="modal-material">
+        <div class="modal" tabindex="-1" role="dialog" id="upload-modal">
             <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -77,31 +87,31 @@
                     <form @submit.prevent="save">
                         <div class="form-group">
                             <div class="form-check form-check-inline">
-                                <input v-model="materialModel.type" class="form-check-input" type="radio" name="type" id="t1" value="1">
+                                <input v-model="uploadModel.type" class="form-check-input" type="radio" name="type" id="t1" value="1">
                                 <label class="form-check-label" for="t1">С компьютера</label>
                             </div>
-                            <!-- <div class="form-check form-check-inline">
-                                <input v-model="materialModel.type" class="form-check-input" type="radio" name="type" id="t2" value="2">
+                            <div class="form-check form-check-inline" v-if="lesson.activeSubscribe">
+                                <input v-model="uploadModel.type" class="form-check-input" type="radio" name="type" id="t2" value="2">
                                 <label class="form-check-label" for="t2">Из библиотеки</label>
-                            </div> -->
+                            </div>
                         </div>
-                        <div class="form-group" v-if="materialModel.type == 1">
+                        <div class="form-group" v-if="uploadModel.type == 1">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input simple-file" :class="{'is-invalid' : errors.file}" id="materialFile" ref="input">
                                 <label class="custom-file-label" for="materialFile">Загрузить</label>
                                 <div class="invalid-feedback" v-if="errors.file">{{errors.file}}</div>
                             </div>
                         </div>
-                        <div class="row" v-else-if="materialModel.type == 2">
+                        <div class="row" v-else-if="uploadModel.type == 2">
                             <div class="col-md-6 form-group">
-                                <select class="form-control" :class="{'is-invalid' : errors.material_id}" v-model="materialModel.material_id">
+                                <select class="form-control" :class="{'is-invalid' : errors.material_id}" v-model="uploadModel.material_id">
                                     <option value="undefined" disabled>Выберите материал из списка</option>
-                                    <option :value="m.id" v-for="m in materials" :key="m.id">{{m.name}}</option>
+                                    <option :value="m.id" v-for="m in lesson.materials" :key="m.id">{{m.name}}</option>
                                 </select>
                                 <div class="invalid-feedback" v-if="errors.material_id">{{errors.material_id}}</div>
                             </div>
                             <div class="col-md-6 form-group">
-                                <input type="text" v-model="materialModel.page" class="form-control" :class="{'is-invalid' : errors.page}" placeholder="Номер страницы">
+                                <input type="text" v-model="uploadModel.page" class="form-control" :class="{'is-invalid' : errors.page}" placeholder="Номер страницы">
                                 <div class="invalid-feedback" v-if="errors.page">{{errors.page}}</div>
                             </div>
                         </div>
@@ -122,10 +132,13 @@ export default {
     props: ['user_id', 'role', 'lesson_id'],
     data(){
         return {
-			lesson: false,
+            lesson: false,
+            sound: false,
+            soundID: false,
+            played: false,
             text: '',
             errors: {},
-            materialModel: {},
+            uploadModel: {},
 			messages: [],
 			messageChannel: false,
 			boardChannel: false,
@@ -134,10 +147,36 @@ export default {
             width: 0,
 			height: 555,
             loading: false,
-            canvasMode: 'draw'
+            canvasMode: 'draw',
+            canvasColors: [ 'black', 'blue', 'green', 'red', 'brown', 'pink', 'yellow', 'orange', 'teal'],
+            canvasColor: 'black',
+            lastTarget: false,
+            selectedObject: false,
+            materialsListActive: false
         }
     },
     methods: {
+        play(file){
+            if(file.id == this.soundID){
+                if(this.played) {
+                    this.sound.pause()
+                    this.played = false
+                }else{
+                    this.played = true
+                    this.sound.play()
+                }
+            }else{
+                this.soundID = file.id
+                this.sound = new Audio('/storage/' + file.src)
+                this.sound.play()
+                this.played == true
+            }
+            if(this.remoteEvent){
+                this.remoteEvent = false
+            }else{
+                this.boardChannel.trigger('client-play', file)
+            }
+        },
         async done(){
             try{
                 await axios.post('/lessons/' + this.lesson.id + '/done')
@@ -145,9 +184,13 @@ export default {
                 alert('Урок успешно завершен')
             }catch(e){}
         },
-        showMaterialModal(){
-            this.materialModel = {}
-            $('#modal-material').modal('show')
+        showUploadModal(){
+            this.uploadModel = {}
+            $('#upload-modal').modal('show')
+        },
+        setCanvasColor(color){
+            this.canvasColor = color;
+            this.canvas.freeDrawingBrush.color = color
         },
         setCanvasMode(mode){
             this.canvasMode = mode
@@ -155,9 +198,14 @@ export default {
                 this.canvas.isDrawingMode = true
                 this.canvas.selection = false
             }else if(this.canvasMode == 'select'){
+                this.canvas.hoverCursor = 'pointer';
                 this.canvas.isDrawingMode = false
                 this.canvas.selection = true
             }else if(this.canvasMode == 'write'){
+                this.canvas.isDrawingMode = false
+                this.canvas.selection = false
+            }else if(this.canvasMode == 'eraser'){
+                this.canvas.hoverCursor = 'no-drop';
                 this.canvas.isDrawingMode = false
                 this.canvas.selection = false
             }
@@ -171,44 +219,52 @@ export default {
                 this.remoteEvent = false
             }
         },
-        async destroyFile(file){},
+        async destroyFile(file){
+            try{
+                await axios.delete('/lessons/deleteFile/' + file.id)
+                this.lesson.files.splice(this.lesson.files.findIndex( f => f.id == file.id), 1)
+                this.$toast.success('Файл успешно удален')
+            }catch(e){}
+        },
         imgToCanvas(file){
-            fabric.Image.fromURL('/storage/' + file.src, (img) => {
-                const obj = img.set({ left: 5, top: 5});
+            fabric.Image.fromURL('/storage/' + file.src, obj => {
+                obj.scaleToWidth(this.width/2);
+                obj.set({ left: 5, top: 5});
                 this.canvas.add(obj); 
             });
         },
         async addMaterial(){
             let valid = true
             const errors = {}
-            if(!this.materialModel.type) return false
-            if(this.materialModel.type == 1 && !this.$refs.input.files.length){
-                this.errors.file = 'Ну выбран файл'
+            if(!this.uploadModel.type) return false
+            if(this.uploadModel.type == 1 && !this.$refs.input.files.length){
+                this.errors.file = 'Не выбран файл'
                 valid = false
             }
-            if(this.materialModel.type == 2 && !this.materialModel.material_id){
+            if(this.uploadModel.type == 2 && !this.uploadModel.material_id){
                 this.errors.material_id = 'Не выбран материал'
                 valid = false
             }
-            if(this.materialModel.type == 2 && !this.materialModel.page){
+            if(this.uploadModel.type == 2 && !this.uploadModel.page){
                 this.errors.material_id = 'Не указан номер страницы'
                 valid = false
             }
             this.errors = errors
             if(!valid) return false
             const formData = new FormData()
-            formData.append('type', this.materialModel.type)
-            if(this.materialModel.type == 1){
+            formData.append('type', this.uploadModel.type)
+            if(this.uploadModel.type == 1){
                 formData.append('file', this.$refs.input.files[0])
             }else{
-                formData.append('material_id', this.materialModel.material_id)
-                formData.append('page', this.materialModel.page)
+                formData.append('material_id', this.uploadModel.material_id)
+                formData.append('page', this.uploadModel.page)
             }
             try{
                 const {data} = await axios.post('/lessons/' + this.lesson.id + '/addMaterial', formData)
-                this.lesson.files.push(data)
-                $('#modal-material').modal('hide')
+                this.$set(this.lesson, 'files', data)
+                $('#upload-modal').modal('hide')
             }catch(e){
+                console.log(e);
                 this.errors = e.response.data.errors
             }
         },
@@ -229,20 +285,47 @@ export default {
         },
 		async save(){
             try{
-                await axios.put('/lessons/' + this.lesson.id + '/saveBoard', { data: JSON.stringify(this.canvas)})
+                await axios.put('/lessons/' + this.lesson.id + '/saveBoard', { data: JSON.stringify(this.canvas.toJSON())})
+                this.$toast.success('Данные успешно сохранены')
             }catch(e){}
 		},
 		clear(){
 			this.canvas.clear()
 			if(!this.remoteEvent) this.boardChannel.trigger('client-clear', {})
+        },
+        generateId(){
+            return `f${(~~(Math.random()*1e8)).toString(16)}`;
+        },
+        addRemoteObj(obj){
+            this.remoteEvent = true
+            fabric.util.enlivenObjects([obj], objects => {
+                var origRenderOnAddRemove = this.canvas.renderOnAddRemove
+                this.canvas.renderOnAddRemove = false
+                this.canvas.add(objects[0])
+                this.canvas.renderOnAddRemove = origRenderOnAddRemove
+                this.canvas.renderAll()
+            })
         }
-	},
+    },
+    beforeRouteLeave (to, from , next) {
+        const answer = window.confirm('Урок еще не закончен, покинуть страницу?')
+        if (answer) {
+            next()
+        } else {
+            next(false)
+        }
+    },
+    beforeDestroy(){
+        window.onbeforeunload = null
+    },
     async created(){
+        // window.onbeforeunload = () => {
+        //     const answer = window.confirm('Урок еще не закончен, покинуть страницу?')
+        //     if(!answer) return false
+        // }
         const lesson = await axios.get('/lessons/' + this.lesson_id)
 		this.lesson = lesson.data
         this.messages = this.lesson.messages
-        const materials = await axios.get('/materials')
-        this.materials = materials.data
         this.scroll();
         this.messageChannel = pusher.subscribe('lesson.' + this.lesson_id);
         this.messageChannel.bind('message', signal => {
@@ -256,13 +339,16 @@ export default {
         // this.drawGrid()
         this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas)
         this.canvas.freeDrawingBrush.width = 4;
-        this.canvas.freeDrawingBrush.color = '#ff00ff'
-        this.setCanvasMode('draw')
+        this.canvas.freeDrawingBrush.color = 'black'
+        this.setCanvasMode('select')
         if(this.lesson.lesson_boards.length){
             this.canvas.loadFromJSON(this.lesson.lesson_boards[0].data, () => {
                 this.canvas.renderAll();
             });
         }
+        this.canvas.on('mouse:down', obj => {
+            if(this.canvasMode == 'eraser' && obj.target) this.canvas.remove(obj.target)
+        });
         this.canvas.on('object:modified', obj => {
             if(!this.remoteEvent){
                 this.boardChannel.trigger('client-modified', obj.target.toJSON())
@@ -272,13 +358,29 @@ export default {
         })
         this.canvas.on('mouse:down', data => {
             if(this.canvasMode == 'write'){
-                const text = new fabric.Textbox('...', { left: data.absolutePointer.x, top: data.absolutePointer.y} )
+                const text = new fabric.Textbox('...', {id: 1, left: data.absolutePointer.x, top: data.absolutePointer.y} )
                 this.canvas.add(text)
+                this.setCanvasMode('select')
+                this.canvas.setActiveObject(text)
             }
         })
         this.canvas.on('object:added', obj => {
             if(!this.remoteEvent){
+                const target = obj.target
+                const name = this.generateId()
+                const tmp = JSON.parse( JSON.stringify(target) )                
+                target.name = tmp.name = name
+                target.toObject = () => { return tmp };
                 this.boardChannel.trigger('client-add', obj.target.toJSON())
+            }else{
+                this.remoteEvent = false
+            }
+        })
+        this.canvas.on('object:removed', obj => {
+            if(!this.remoteEvent){
+                this.boardChannel.trigger('client-removed', {
+                    name: obj.target.name
+                })
             }else{
                 this.remoteEvent = false
             }
@@ -287,36 +389,62 @@ export default {
 		this.boardChannel.bind('client-clear', signal => {
 			this.remoteEvent = true
 			this.clear()
-		})
+        })
+        this.boardChannel.bind('client-play', file => {
+            this.remoteEvent = true
+            this.play(file)
+        })
         this.boardChannel.bind('client-add', obj => {
             this.remoteEvent = true;
-            fabric.util.enlivenObjects([obj], objects => {
-                var origRenderOnAddRemove = this.canvas.renderOnAddRemove
-                this.canvas.renderOnAddRemove = false
-                objects.forEach( o => { this.canvas.add(o) })
-                this.canvas.renderOnAddRemove = origRenderOnAddRemove
-                this.canvas.renderAll()
-            })
+            this.addRemoteObj(obj)
         })
         this.boardChannel.bind('client-undo', obj => {
             this.remoteEvent = true;
             this.canvasUndo()
         })
+        this.boardChannel.bind('client-removed', obj => {
+            this.remoteEvent = true;
+            this.canvas.getObjects().forEach(o => {
+                if(o.name == obj.name) {
+                    this.canvas.remove(o);
+                }
+            })
+        })
         this.boardChannel.bind('client-modified', obj => {
-            console.log(obj)
+            this.remoteEvent = true;
+            this.canvas.getObjects().forEach(o => {
+                if(o.name == obj.name) {
+                    this.canvas.remove(o);
+                    this.addRemoteObj(obj)
+                }
+            })
         })
     }
 }
 </script>
 <style lang="scss">
-.materials{
+.materials-list{
+    height: 0;
     overflow: auto;
+    transition: 0.3s height;
+    white-space: nowrap;
+    &.active{
+        height:128px;
+    }
     .card{
-        width: 128px;
-        height: 128px;
+        padding: 0;
+        margin: 0 3px;
+        width: 100px;
+        height: 100px;
         background-repeat: no-repeat;
         background-position: center;
         background-size: contain;
+        position: relative;
+        .buttons{
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
     }
 }
 </style>
