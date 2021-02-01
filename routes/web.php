@@ -15,6 +15,9 @@ Route::get('/posts/{post}', 'HomeController@post')->name('posts.show');
 Route::group([
     'middleware' => ['auth']
 ], function(){
+    Route::get('/chat/users', 'ChatController@users');
+    Route::get('/chat/getMessages', 'ChatController@getMessages');
+    Route::post('/chat/message', 'ChatController@message');
     Route::delete('/lessons/deleteFile/{id}', 'LessonController@deleteFile');
     Route::get('/materials', function(){ return App\Material::all(); });
     Route::post('/profile', 'UserController@update')->name('profile.update');

@@ -1,36 +1,50 @@
 <template>
     <div class="card">
 		<div class="card-header py-2" v-if="lesson">
-			{{lesson.subject.name}}
+            <div class="row">
+                <div class="col-md-8 mb-1 mb-md-0">
+                    {{lesson.subject.name}}
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i></button>
+                        <button class="btn btn-sm btn-outline-secondary" @click="save" v-if="role == 'teacher'"><i class="fa fa-save"></i></button>
+                        <button class="btn btn-sm btn-success" @click="done" v-if="!lesson.done">Завершить урок</button>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <div class="w-100">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" :style="{width: progress + '%'}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 		</div>
         <div class="card-body">
 			<div class="row">
 				<div class="col-md-8">
-					<div class="card">
+					<div class="card" ref="canvasScreen">
 						<div class="card-header p-1">
-							<!-- <button class="btn btn-sm btn-primary">Новая доска</button> -->
-							<div class="float-left">
-                                <button class="btn btn-sm mr-1" @click="clear" v-if="role == 'teacher'"><i class="fa fa-trash"></i></button>
-                                <button class="btn btn-sm btn-primary" @click="materialsListActive = !materialsListActive" v-if="role == 'teacher'"><i class="fa fa-upload"></i></button>
-                                <div class="btn-group ml-3">
-                                    <button class="btn btn-sm" @click="canvasUndo"><i class="fa fa-undo"></i></button>
-                                    <button class="btn btn-sm" :class="{'btn-primary': canvasMode == 'draw'}" @click="setCanvasMode('draw')"><i class="fa fa-pencil"></i></button>
-                                    <button class="btn btn-sm" :class="{'btn-primary': canvasMode == 'select'}" @click="setCanvasMode('select')"><i class="fa fa-arrows"></i></button>
-                                    <button class="btn btn-sm" :class="{'btn-primary': canvasMode == 'write'}" @click="setCanvasMode('write')"><i class="fa fa-font"></i></button>
-                                    <button class="btn btn-sm" :class="{'btn-primary': canvasMode == 'eraser'}" @click="setCanvasMode('eraser')"><i class="fa fa-eraser"></i></button>
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm" data-toggle="dropdown" :style="{background: canvasColor}">&nbsp;</button>
-                                        <div class="dropdown-menu">
-                                            <div class="dropdown-item">
-                                                <button class="btn btn-sm mx-1" v-for="color in canvasColors" :key="color" @click="setCanvasColor(color)" :style="{background: color}">&nbsp;</button>
-                                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-outline-secondary" @click="materialsListActive = !materialsListActive" v-if="role == 'teacher'"><i class="fa fa-plus text-primary"></i></button>
+                                <button class="btn btn-outline-secondary" @click="zoom(true)"><i class="fa fa-search-plus text-info"></i></button>
+                                <button class="btn btn-outline-secondary" @click="zoom(false)"><i class="fa fa-search-minus text-info"></i></button>
+                                <button class="btn btn-outline-secondary" @click="clear" v-if="role == 'teacher'"><i class="fa fa-trash text-danger"></i></button>
+                                <button class="btn btn-outline-secondary" :class="{'active': canvasMode == 'eraser'}" @click="setCanvasMode('eraser')"><i class="fa fa-eraser text-warning"></i></button>
+                                <button class="btn btn-outline-secondary" @click="canvasUndo"><i class="fa fa-undo text-warning"></i></button>
+                                <button class="btn btn-outline-secondary" :class="{'active': canvasMode == 'draw'}" @click="setCanvasMode('draw')"><i class="fa fa-pencil" :style="{color: canvasColor}"></i></button>
+                                <button class="btn btn-outline-secondary" :class="{'active': canvasMode == 'write'}" @click="setCanvasMode('write')"><i class="fa fa-font" :style="{color: canvasColor}"></i></button>
+                                <button class="btn btn-outline-secondary" :class="{'active': canvasMode == 'select'}" @click="setCanvasMode('select')"><i class="fa fa-arrows-h"></i></button>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" ><i class="fa fa-circle" :style="{color: canvasColor}"></i></button>
+                                    <div class="dropdown-menu">
+                                        <div class="dropdown-item">
+                                            <button class="btn btn-sm mx-1" v-for="color in canvasColors" :key="color" @click="setCanvasColor(color)" :style="{background: color}">&nbsp;</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="float-right">
-                                <button class="btn btn-sm btn-primary" @click="save" v-if="role == 'teacher'">Сохранить</button>
-                                <button class="btn btn-sm btn-success" @click="done" v-if="!lesson.done">Завершить урок</button>
+                                <button class="btn btn-outline-secondary" @click="toggleFullScreen"><i class="fa fa-arrows-alt"></i></button>
                             </div>
 						</div>
 						<div class="board-container" ref="boardContainer">
@@ -152,10 +166,50 @@ export default {
             canvasColor: 'black',
             lastTarget: false,
             selectedObject: false,
-            materialsListActive: false
+            materialsListActive: false,
+            fullscreen: false,
+            progress: 0
         }
     },
     methods: {
+        toggleFullScreen(){
+            if(this.fullscreen){
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                    document.msExitFullscreen();
+                }
+            }else{
+                const elem = this.$refs.canvasScreen;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) { /* Safari */
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { /* IE11 */
+                    elem.msRequestFullscreen();
+                }
+            }
+            this.fullscreen = !this.fullscreen
+            this.calcCanvasSize()
+        },
+        calcCanvasSize(){
+            const width = this.$refs.canvasScreen.clientWidth
+            const height = this.fullscreen ? (this.$refs.canvasScreen.clientHeight - 46) : this.height;
+            console.log(height)
+            this.canvas.setWidth( width );
+            this.canvas.setHeight( height );
+            this.canvas.calcOffset();
+        },
+        zoom(flag){
+            let zoom = this.canvas.getZoom();
+            const delta = 50
+            zoom = !flag ? zoom * (0.999 ** delta) : zoom / (0.999 ** delta);
+            if (zoom > 20) zoom = 20;
+            if (zoom < 0.01) zoom = 0.01;
+            this.canvas.setZoom(zoom);
+        },
         play(file){
             if(file.id == this.soundID){
                 if(this.played) {
@@ -213,11 +267,11 @@ export default {
         canvasUndo(){
             var object = this.canvas.item(this.canvas.getObjects().length-1);
             this.canvas.remove(object);
-            if(!this.remoteEvent){
-                this.boardChannel.trigger('client-undo', {})
-            }else{
-                this.remoteEvent = false
-            }
+            // if(!this.remoteEvent){
+            //     this.boardChannel.trigger('client-undo', {})
+            // }else{
+            //     this.remoteEvent = false
+            // }
         },
         async destroyFile(file){
             try{
@@ -290,39 +344,50 @@ export default {
             }catch(e){}
 		},
 		clear(){
-			this.canvas.clear()
-			if(!this.remoteEvent) this.boardChannel.trigger('client-clear', {})
+			this.canvas.clear();
+			this.boardChannel.trigger('client-clear', {});
         },
         generateId(){
             return `f${(~~(Math.random()*1e8)).toString(16)}`;
         },
-        addRemoteObj(obj){
-            this.remoteEvent = true
-            fabric.util.enlivenObjects([obj], objects => {
-                var origRenderOnAddRemove = this.canvas.renderOnAddRemove
-                this.canvas.renderOnAddRemove = false
-                this.canvas.add(objects[0])
-                this.canvas.renderOnAddRemove = origRenderOnAddRemove
-                this.canvas.renderAll()
-            })
+        addRemoteObj(data){
+            this.remoteEvent = true;
+            fabric.util.enlivenObjects([data], objects => {
+                const obj = objects[0];
+                obj.id = data.id;
+                var origRenderOnAddRemove = this.canvas.renderOnAddRemove;
+                this.canvas.renderOnAddRemove = false;
+                this.canvas.add(obj);
+                this.canvas.renderOnAddRemove = origRenderOnAddRemove;
+                this.canvas.renderAll();
+            });
+        },
+        timer(){
+            this.progress++;
+            if(this.progress == 20){
+                clearInterval(this.interval)
+                this.$swal({
+                    text: 'Урок завершен',
+                    icon: 'success',
+                });
+            }
         }
     },
-    beforeRouteLeave (to, from , next) {
-        const answer = window.confirm('Урок еще не закончен, покинуть страницу?')
-        if (answer) {
-            next()
-        } else {
-            next(false)
-        }
+    async beforeRouteLeave (to, from , next) {
+        const {isConfirmed} = await this.$swal({
+            text: 'Урок еще не закончен, вы уверены, что хотите покинуть его?',
+            icon: 'info',
+            showDenyButton: true,
+            confirmButtonText: 'Подтвердить',
+            denyButtonText: 'Отмена',
+        });
+        next(isConfirmed);
     },
     beforeDestroy(){
-        window.onbeforeunload = null
+        pusher.unsubscribe('presence-lesson-channel-' + this.lesson_id)
     },
     async created(){
-        // window.onbeforeunload = () => {
-        //     const answer = window.confirm('Урок еще не закончен, покинуть страницу?')
-        //     if(!answer) return false
-        // }
+        this.interval = setInterval( this.timer, 1000 )
         const lesson = await axios.get('/lessons/' + this.lesson_id)
 		this.lesson = lesson.data
         this.messages = this.lesson.messages
@@ -334,9 +399,8 @@ export default {
 		})
         // //////////////////////////////////////////////////
         this.width = $('.board-container').width()
+        $(window).resize(this.calcCanvasSize);
         this.canvas = new fabric.Canvas(this.$refs.boardCanvas, { height: this.height,  width: this.width})
-        // this.canvas.setOverlayColor({source: '/images/grid.jpg'}, this.canvas.renderAll.bind(this.canvas));
-        // this.drawGrid()
         this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas)
         this.canvas.freeDrawingBrush.width = 4;
         this.canvas.freeDrawingBrush.color = 'black'
@@ -346,44 +410,51 @@ export default {
                 this.canvas.renderAll();
             });
         }
-        this.canvas.on('mouse:down', obj => {
-            if(this.canvasMode == 'eraser' && obj.target) this.canvas.remove(obj.target)
-        });
-        this.canvas.on('object:modified', obj => {
+        this.canvas.on('object:modified', ({target}) => {
             if(!this.remoteEvent){
-                this.boardChannel.trigger('client-modified', obj.target.toJSON())
+                this.boardChannel.trigger('client-modified', target.toObject(['name']))
             }else{
                 this.remoteEvent = false
             }
         })
-        this.canvas.on('mouse:down', data => {
-            if(this.canvasMode == 'write'){
-                const text = new fabric.Textbox('...', {id: 1, left: data.absolutePointer.x, top: data.absolutePointer.y} )
-                this.canvas.add(text)
+        this.canvas.on('mouse:down', (data) => {
+            if(this.canvasMode === 'eraser' && data.target) this.canvas.remove(data.target);
+            else if(this.canvasMode == 'write'){
+                let text = new fabric.Textbox('', { left: data.absolutePointer.x, top: data.absolutePointer.y} );
+                text.set({ fill: this.canvasColor });
+                this.canvas.add(text);
+                this.canvas.setActiveObject(text);
+                text.enterEditing();
+                text.hiddenTextarea.focus();
                 this.setCanvasMode('select')
-                this.canvas.setActiveObject(text)
             }
         })
-        this.canvas.on('object:added', obj => {
+        this.canvas.on('object:added', ({target}) => {
             if(!this.remoteEvent){
-                const target = obj.target
-                const name = this.generateId()
-                const tmp = JSON.parse( JSON.stringify(target) )                
-                target.name = tmp.name = name
-                target.toObject = () => { return tmp };
-                this.boardChannel.trigger('client-add', obj.target.toJSON())
+                target.name = this.generateId();
+                this.boardChannel.trigger('client-add', target.toObject(['name']))
             }else{
                 this.remoteEvent = false
             }
         })
-        this.canvas.on('object:removed', obj => {
+        this.canvas.on('object:removed', ({target}) => {
             if(!this.remoteEvent){
                 this.boardChannel.trigger('client-removed', {
-                    name: obj.target.name
+                    name: target.name
                 })
             }else{
                 this.remoteEvent = false
             }
+        })
+        this.canvas.on('mouse:wheel', opt => {
+            var delta = opt.e.deltaY;
+            var zoom = this.canvas.getZoom();
+            zoom *= 0.999 ** delta;
+            if (zoom > 20) zoom = 20;
+            if (zoom < 0.01) zoom = 0.01;
+            this.canvas.setZoom(zoom);
+            opt.e.preventDefault();
+            opt.e.stopPropagation();
         })
 		this.boardChannel = pusher.subscribe('presence-lesson-channel-' + this.lesson_id)
 		this.boardChannel.bind('client-clear', signal => {

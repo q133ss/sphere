@@ -56,7 +56,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Дополнительная информация</label>
-                                <textarea name="about" rows="3" class="form-control" noresize placeholder="Напишите что-нибудь о себе" value="{{old('about') ? old('about') : $user->about}}"></textarea>
+                                <textarea name="about" rows="5" class="form-control" noresize placeholder="Напишите что-нибудь о себе">{{old('about') ? old('about') : $user->about}}</textarea>
                             </div>
                             <div class="form-group">
                                 <label>Стоимость урока</label>

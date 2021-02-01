@@ -10,7 +10,7 @@
                     <div class="small text-muted">{{notify.created_at | moment('DD.MM.YYYY HH:mm')}}</div>
                     <div>{{notify.text}}</div>
                 </div>
-                <button class="btn btn-sm btn-danger" @click.stop="destroyNotification(notify.id)"><i class="fa fa-trash"></i></button>
+                <button class="btn btn-sm btn-danger" @click.stop="destroy(notify.id, i)"><i class="fa fa-trash"></i></button>
             </li>
         </div>
     </div>

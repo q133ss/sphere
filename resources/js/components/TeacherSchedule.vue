@@ -126,6 +126,7 @@ export default {
             finally{ this.model = {}}
         },
         showEvent(info) {
+            if(!info.event.student_id) return false
             this.model = {
                 id: info.event.id,
                 title: info.event.title,

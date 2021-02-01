@@ -10,12 +10,17 @@ use App\Lesson;
 use App\Payment;
 use App\Events\UserNotificationEvent;
 use App\Events\TeacherScheduleEvent;
+use App\Subject;
 class TeacherController extends Controller
 {
-    public function index(){
-        $teachers = User::whereRoleId(3)->whereActive(1)->whereConfirmed(1)->paginate(25);
+    public function index(Request $request){
+        if($request->wantsJson()){
+            $teachers = User::with('subjects')->whereRoleId(3)->whereActive(1)->whereConfirmed(1)->paginate(25);
+            return $teachers;
+        }
         $myTeachers = auth()->user()->teachers->map(function($item){ return $item->id;});
-        return view('student.teachers.index', compact('teachers', 'myTeachers'));
+        $subjects = Subject::all();
+        return view('student.teachers.index', compact('myTeachers', 'subjects'));
     }
     public function show($id){
         $teacher = User::with(['subjects'])->findOrfail($id);

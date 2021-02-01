@@ -3,16 +3,19 @@
 <div class="card">
     <div class="card-header">Список занятий</div>
     <div class="card-body">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-striped">
             <tr>
-                <th>Ученик</th>
-                <th>Предмет</th>
-                <th>Статус</th>
-                <th></th>
+                <td>Ученик</td>
+                <td>Предмет</td>
+                <td>Статус</td>
+                <td></td>
             </tr>
             @foreach($lessons as $lesson)
             <tr>
-                <td>{{$lesson->student->surname}} {{$lesson->student->name}} {{$lesson->student->lastname}}</td>
+                <td>
+                    <img src="{{$lesson->student->photo}}" alt="{{$lesson->student->full_name}}" class="avatar">
+                    {{$lesson->student->full_name}}
+                </td>
                 <td><span class="badge badge-primary">{{$lesson->subject->name}}</span></td>
                 <td>
                     {{$lesson->start->diffForHumans()}}

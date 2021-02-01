@@ -12,12 +12,12 @@
 	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 	<script src="{{ asset('js/app.js') }}" defer></script>
 </head>
-<body class="dashboard sidebar-active sidebar-open">
+<body class="dashboard sidebar-active">
 	<div id="app">
 		<header>
-			<nav class="bg-info navbar-dark fixed-top d-flex justify-content-between align-items-center">
-				<a class="navbar-brand pl-2" href="{{route('home')}}">
-					<span class="d-inline-block text-center mr-2" style="width: 64px"><img src="/images/1.svg" width="32px" height="32px" alt="Сфера"></span>
+			<nav class="navbar-light bg-white fixed-top d-flex justify-content-between align-items-center">
+				<a class="navbar-brand" href="{{route('home')}}">
+					<span class="d-inline-block text-center" style="width: 64px"><img src="/images/1.svg" width="32px" height="32px" alt="Сфера"></span>
                     Сфера
 				</a>
 				<nav class="nav align-items-center">
@@ -45,6 +45,17 @@
 			<div class="row justify-content-end">
 				<nav class="sidebar">
 					<div class="sidebar-sticky">
+						<div class="text-center my-4 sidebar__profile">
+							<img class="avatar mb-3" src="{{auth()->user()->photo}}" alt="{{auth()->user()->full_name}}">
+							<div class="sidebar__user-name">
+								<div>{{auth()->user()->full_name}}</div>
+								<div class="text-center">
+									<a href="{{route(auth()->user()->role->name.'.profile')}}" class="btn btn-sm btn-outline-light"><i class="fa fa-cogs"></i></a>
+									<button onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-sm btn-outline-light"><i class="fa fa-power-off"></i></button>
+								</div>
+							</div>
+
+						</div>
 						@include('layouts.navs.'.auth()->user()->role->name)
 					</div>
 				</nav>

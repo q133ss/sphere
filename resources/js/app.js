@@ -7,9 +7,12 @@ require('moment/locale/ru')
 import VueToast from 'vue-toast-notification';
 //import 'vue-toast-notification/dist/theme-default.css';
 import 'vue-toast-notification/dist/theme-sugar.css';
-
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+Vue.use(VueSweetalert2);
 Vue.use(VueToast, { position: 'top' });
-
+import Multiselect from 'vue-multiselect'
+Vue.component('multiselect', Multiselect)
 Vue.component('profile-photo', require('./components/ProfilePhoto.vue').default)
 Vue.component('profile-docs', require('./components/ProfileDocuments.vue').default)
 Vue.component('lesson', require('./components/Lesson.vue').default)
@@ -21,6 +24,9 @@ Vue.component('student-schedule', require('./components/StudentSchedule.vue').de
 Vue.component('notifications', require('./components/Notifications.vue').default)
 Vue.component('tickets', require('./components/Tickets.vue').default)
 Vue.component("video-chat", require("./components/VideoChat.vue").default);
+Vue.component("repetitors-list", require("./components/RepetitorsList.vue").default);
+Vue.component("button-timer", require("./components/ButtonTimer.vue").default);
+Vue.component("chat", require("./components/Chat.vue").default);
 import VueMoment from 'vue-moment'
 Vue.use(VueMoment, { moment })
 const app = new Vue({
@@ -47,6 +53,12 @@ $(document).ready(function(){
     $('.sidebar-toggle').click(function(e){
         e.preventDefault();
         toggleSidebar()
+    })
+    $('.sidebar').mouseover(function(){
+        $('body').addClass('sidebar-open')
+    })
+    $('.sidebar').mouseleave(function(){
+        $('body').removeClass('sidebar-open')
     })
     // $(window).resize(function(e){
     //     ww = $(window).width()

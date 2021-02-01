@@ -1,6 +1,9 @@
 // Body
 $body-bg: #eaeaea;
-
+$warning: #ffbc34;
+$success: #22c6ab;
+$danger: #ef6e6e;
+$primary: #4798e8;
 // Typography
 $font-family-sans-serif: 'Nunito', sans-serif;
 $font-size-base: 0.9rem;
@@ -11,7 +14,7 @@ $blue: #3490dc;
 $indigo: #6574cd;
 $purple: #9561e2;
 $pink: #f66d9b;
-$red: #e3342f;
+$red: #ef6e6e;
 $orange: #f6993f;
 $yellow: #ffed4a;
 $green: #38c172;
@@ -23,3 +26,6 @@ $custom-file-text: (
   en: "Browse",
   ru: "Выбрать"
 );
+$border-radius:               0;
+$border-radius-lg:            0;
+$border-radius-sm:            0;

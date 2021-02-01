@@ -29,16 +29,20 @@
                 </div>
             </div>
             <p class="text-muted" v-if="!tickets.length">Список пуст</p>
-            <table class="table table-sm table-bordered table-hover" v-else>
+            <table class="table table-bordered table-ыекшзув" v-else>
                 <tr>
-                    <th>Дата</th>
-                    <th class="text-truncate">Вопрос</th>
-                    <th>Статус</th>
+                    <td width="150px">Статус</td>
+                    <td width="150px">Дата</td>
+                    <td class="text-truncate">Вопрос</td>
                 </tr>
-                <tr @click="model=ticket" v-for="ticket in tickets" :key="ticket.id" :class="{'table-success': ticket.status == 'closed', 'table-warning': ticket.status = 'user'}">
+                <tr @click="model=ticket" v-for="ticket in tickets" :key="ticket.id">
+                    <td>
+                        <span v-if="ticket.status == 'user'" class="text-light badge p-2 badge-warning">Ожидает ответа</span>
+                        <span v-else-if="ticket.status == 'closed'" class="text-light badge p-2 badge-success">Закрыт</span>
+                        <span v-else-if="ticket.status == 'admin'" class="text-light badge p-2 badge-info">Отвечен</span>
+                    </td>
                     <td>{{ticket.created_at | moment('DD.MM.YYYY HH:mm')}}</td>
                     <td>{{ticket.text}}</td>
-                    <td>{{ticket.status == 'closed' ? 'Закрыт' : (ticket.status == 'user' ? 'Ожидвает ответа' : 'Отвечен')}}</td>
                 </tr>
             </table>
         </div>

@@ -6,15 +6,12 @@
 <div class="row">
     <div class="col-md-3">
         <div class="card">
-            <img src="{{$teacher->photo}}" class="card-img-top" alt="{{$teacher->surname}} {{$teacher->name}}">
             <div class="card-body">
-                <h5 class="card-title">{{$teacher->surname}} {{$teacher->name}}</h5>
-                <p class="card-text">
-                    @include('student.teachers.rate', ['rate' => $teacher->rate])
-                </p>
-                <p class="small">Стоиомость: {{$teacher->lesson_price}} <i class="fa fa-rub"></i></p>
+                <div class="photo mb-1 upload-container" style="background-image: url({{$teacher->photo}})"></div>
+                <h5 class="card-title text-center">{{$teacher->surname}} {{$teacher->name}}</h5>
+                <p class="text-center small">Стоиомость: {{$teacher->lesson_price}} <i class="fa fa-rub"></i></p>
                 @foreach($teacher->subjects as $subject)
-                    <span class="badge badge-primary">{{$subject->name}}</span>
+                    <div class="text-center"><span class="w-100 badge badge-primary">{{$subject->name}}</span></div>
                 @endforeach
                 <div class="my-3">{{$teacher->about}}</div>
             </div>

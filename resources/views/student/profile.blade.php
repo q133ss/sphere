@@ -44,10 +44,6 @@
                                 @error('email')<div class="invalid-feedback">{{$message}}</div>@enderror
                             </div>
                             <div class="form-group">
-                                <input type="text" name="phone" class="form-control phone @error('phone') is-invalid @enderror" placeholder="Телефон" value="{{old('phone') ? old('phone') : $user->phone}}">
-                                @error('phone')<div class="invalid-feedback">{{$message}}</div>@enderror
-                            </div>
-                            <div class="form-group">
                                 <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Новый пароль">
                                 @error('password')<div class="invalid-feedback">{{$message}}</div>@enderror
                             </div>

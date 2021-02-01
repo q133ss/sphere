@@ -32,6 +32,7 @@
         "@fullcalendar/vue": "^5.4.0",
         "fabric": "^4.2.0",
         "font-awesome": "^4.7.0",
+        "font-awesome-sass": "^4.7.0",
         "jquery-mask-plugin": "^1.14.16",
         "laravel-echo": "^1.10.0",
         "moment": "^2.29.1",
@@ -39,6 +40,8 @@
         "pusher-js": "^7.0.2",
         "simple-peer": "^9.9.3",
         "vue-moment": "^4.1.0",
+        "vue-multiselect": "^2.1.6",
+        "vue-sweetalert2": "^4.2.0",
         "vue-toast-notification": "^0.6.0",
         "wc-air-datepicker": "^0.3.0"
     }

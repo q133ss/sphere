@@ -25,13 +25,13 @@
 
         <h2>История операций</h2>
         @if($payments->count())
-        <table class="table table-bordered table-sm">
+        <table class="table table-bordered table-striped">
             <tr>
-                <th></th>
-                <th>Дата</th>
-                <th>Сумма</th>
-                <th>Статус</th>
-                <th>Комментарий</th>
+                <td></td>
+                <td>Дата</td>
+                <td>Сумма</td>
+                <td>Статус</td>
+                <td>Комментарий</td>
             </tr>
             @foreach($payments as $i => $payment)
             <tr>
@@ -39,7 +39,7 @@
                 <td>{{$payment->created_at->format('d.m.Y H:i')}}</td>
                 <td>{{$payment->type == 'out' ? '-' : ''}}{{$payment->amount}} <i class="fa fa-rub"></i></td>
                 <td>
-                    <span class="badge badge-{{ ['new' => 'info', 'canceled' => 'danger', 'success' => 'success'][$payment->status] }}">{{App\Payment::$status[$payment->status]}}</span>
+                    <span class="badge badge-{{ ['new' => 'primary', 'canceled' => 'danger', 'success' => 'success'][$payment->status] }}">{{App\Payment::$status[$payment->status]}}</span>
                 </td>
                 <td>{{$payment->comment}}</td>
             </tr>

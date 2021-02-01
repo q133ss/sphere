@@ -3,36 +3,31 @@
 <div class="card">
     <div class="card-header">С возвращением {{auth()->user()->full_name}}</div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="card veh shadow-sm">
-                    <div class="card-body">
-                        <div class="veh-title">Сегодня занятий</div>
-                        <div class="veh-value">{{\App\Lesson::where('student_id', auth()->id())->whereDate('start', \Carbon\Carbon::now())->count()}}</div>
+     <div class="row no-gutters">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <span class="dashboard__card__icon success"><i class="fa fa-home fa-lg"></i></span>
+                        <span class="dashboard__card__name">Сегодня занятий</span>
+                        <span class="dashboard__card__value">{{\App\Lesson::where('student_id', auth()->id())->whereDate('start', \Carbon\Carbon::now())->count()}}</span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card veh shadow-sm">
-                    <div class="card-body">
-                        <div class="veh-title">Мой рейтинг</div>
-                        <div class="veh-value">25</div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <span class="dashboard__card__icon warning"><i class="fa fa-home fa-lg"></i></span>
+                        <span class="dashboard__card__name">Количество уроков</span>
+                        <span class="dashboard__card__value">{{\App\Lesson::where('student_id', auth()->id())->where('status', 'success')->count()}}</span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card veh shadow-sm">
-                    <div class="card-body">
-                        <div class="veh-title">Количество уроков</div>
-                        <div class="veh-value">{{\App\Lesson::where('student_id', auth()->id())->where('status', 'success')->count()}}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card veh shadow-sm">
-                    <div class="card-body">
-                        <div class="veh-title">Что то еще</div>
-                        <div class="veh-value">1232</div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <span class="dashboard__card__icon info"><i class="fa fa-home fa-lg"></i></span>
+                        <span class="dashboard__card__name">Что-то еще</span>
+                        <span class="dashboard__card__value">123</span>
                     </div>
                 </div>
             </div>

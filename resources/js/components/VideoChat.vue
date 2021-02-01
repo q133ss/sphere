@@ -1,7 +1,7 @@
 <template>
 <div class="card mb-1">
-  <div class="card-header p-1">
-    Видеотрансляция
+  <div class="card-header p-1 d-flex justify-content-between align-items-center">
+    <span>Видеотрансляция</span>
     <div class="float-right">
       <div v-if="callPlaced">
         <button type="button" class="btn mx-1 btn-sm btn-info" @click="toggleMuteAudio"><i class="fa" :class="{ 'fa-microphone': !mutedAudio, 'fa-microphone-slash': mutedAudio}"></i></button>

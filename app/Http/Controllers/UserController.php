@@ -16,7 +16,7 @@ class UserController extends Controller
         $path = $request->file('photo')->store('photos');
         $user->photo = $path;
         $user->save();
-        return $path;
+        return $user->photo;
     }
     public function uploadDocs(Request $request){
         $user = auth()->user();
@@ -26,15 +26,17 @@ class UserController extends Controller
     }
     public function update(Request $request){
         $user = auth()->user();
-        $request->validate([
+        $validator = [
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'lesson_price' => 'nullable|numeric|min:0',
-            'phone' => 'required|string|max:255|unique:users,phone,'.$user->id,
             'age' => 'nullable|numeric',
             'password' => 'nullable|string|min:6|max:255|confirmed'
-        ]);
+        ];
+        if($user->role->name == 'teacher')
+            $validator['phone'] = 'required|string|max:255|unique:users,phone,'.$user->id;
+        $request->validate($validator);
         $data = $request->except(['password', 'subjects']);
         if($request->password) $data['password'] = bcrypt($request->password);
         $data['confirm_request'] = $request->has('confirm_request');
