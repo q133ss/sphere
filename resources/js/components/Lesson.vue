@@ -5,15 +5,19 @@
                 <div class="col-md-8 mb-1 mb-md-0">
                     {{lesson.subject.name}}
                     <div class="float-right">
-                        <button class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i></button>
-                        <button class="btn btn-sm btn-outline-secondary" @click="save" v-if="role == 'teacher'"><i class="fa fa-save"></i></button>
-                        <button class="btn btn-sm btn-success" @click="done" v-if="!lesson.done">Завершить урок</button>
+                        <button class="btn btn-sm btn-icon btn-outline-secondary"><i class="fa fa-plus"></i></button>
+                        <button class="btn btn-sm btn-icon btn-outline-secondary" @click="save" v-if="role == 'teacher'"><i class="fa fa-save"></i></button>
+                        <!-- <button class="btn btn-sm btn-success" @click="done" v-if="!lesson.done">Завершить урок</button> -->
                     </div>
                 </div>
                 <div class="col-md-4 d-flex align-items-center">
                     <div class="w-100">
-                        <div class="progress">
+                        <div class="progress mb-1" style="height: 1px;">
+                            <div class="progress-bar bg-warning" role="progressbar" :style="{width: 16.66 + '%'}"></div>
+                        </div>
+                        <div class="progress bg-success position-relative">
                             <div class="progress-bar" role="progressbar" :style="{width: progress + '%'}"></div>
+                            <div class="text-light justify-content-center d-flex position-absolute w-100 align-items-center h-100">{{timeStr}}</div>
                         </div>
                     </div>
                 </div>
@@ -24,27 +28,25 @@
 				<div class="col-md-8">
 					<div class="card" ref="canvasScreen">
 						<div class="card-header p-1">
-                            <div class="btn-group">
-                                <button class="btn btn-outline-secondary" @click="materialsListActive = !materialsListActive" v-if="role == 'teacher'"><i class="fa fa-plus text-primary"></i></button>
-                                <button class="btn btn-outline-secondary" @click="zoom(true)"><i class="fa fa-search-plus text-info"></i></button>
-                                <button class="btn btn-outline-secondary" @click="zoom(false)"><i class="fa fa-search-minus text-info"></i></button>
-                                <button class="btn btn-outline-secondary" @click="clear" v-if="role == 'teacher'"><i class="fa fa-trash text-danger"></i></button>
-                                <button class="btn btn-outline-secondary" :class="{'active': canvasMode == 'eraser'}" @click="setCanvasMode('eraser')"><i class="fa fa-eraser text-warning"></i></button>
-                                <button class="btn btn-outline-secondary" @click="canvasUndo"><i class="fa fa-undo text-warning"></i></button>
-                                <button class="btn btn-outline-secondary" :class="{'active': canvasMode == 'draw'}" @click="setCanvasMode('draw')"><i class="fa fa-pencil" :style="{color: canvasColor}"></i></button>
-                                <button class="btn btn-outline-secondary" :class="{'active': canvasMode == 'write'}" @click="setCanvasMode('write')"><i class="fa fa-font" :style="{color: canvasColor}"></i></button>
-                                <button class="btn btn-outline-secondary" :class="{'active': canvasMode == 'select'}" @click="setCanvasMode('select')"><i class="fa fa-arrows-h"></i></button>
-                                <div class="btn-group">
-                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" ><i class="fa fa-circle" :style="{color: canvasColor}"></i></button>
-                                    <div class="dropdown-menu">
-                                        <div class="dropdown-item">
-                                            <button class="btn btn-sm mx-1" v-for="color in canvasColors" :key="color" @click="setCanvasColor(color)" :style="{background: color}">&nbsp;</button>
-                                        </div>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" @click="materialsListActive = !materialsListActive" v-if="role == 'teacher'"><i class="fa fa-plus text-primary"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" @click="zoom(true)"><i class="fa fa-search-plus text-info"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" @click="zoom(false)"><i class="fa fa-search-minus text-info"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" @click="clear" v-if="role == 'teacher'"><i class="fa fa-trash text-danger"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'eraser'}" @click="setCanvasMode('eraser')"><i class="fa fa-eraser text-warning"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" @click="canvasUndo"><i class="fa fa-undo text-warning"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'draw'}" @click="setCanvasMode('draw')"><i class="fa fa-pencil" :style="{color: canvasColor}"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'write'}" @click="setCanvasMode('write')"><i class="fa fa-font" :style="{color: canvasColor}"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'select'}" @click="setCanvasMode('select')"><i class="fa fa-arrows-h"></i></button>
+                            <span>
+                                <button class="btn btn-icon btn-outline-secondary" data-toggle="dropdown" ><i class="fa fa-circle" :style="{color: canvasColor}"></i></button>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-item">
+                                        <button class="btn btn-sm btn-icon mx-1" v-for="color in canvasColors" :key="color" @click="setCanvasColor(color)" :style="{background: color}"></button>
                                     </div>
                                 </div>
-                            </div>
+                            </span>
                             <div class="float-right">
-                                <button class="btn btn-outline-secondary" @click="toggleFullScreen"><i class="fa fa-arrows-alt"></i></button>
+                                <button class="btn btn-icon btn-outline-secondary" @click="toggleFullScreen"><i class="fa fa-arrows-alt"></i></button>
                             </div>
 						</div>
 						<div class="board-container" ref="boardContainer">
@@ -168,7 +170,9 @@ export default {
             selectedObject: false,
             materialsListActive: false,
             fullscreen: false,
-            progress: 0
+            progress: 0,
+            totalTime: 500,
+            timeStr: ''
         }
     },
     methods: {
@@ -363,8 +367,14 @@ export default {
             });
         },
         timer(){
-            this.progress++;
-            if(this.progress == 20){
+            this.totalTime ++
+            this.progress = Math.floor(this.totalTime * 100 / 3600)
+            let minuts = parseInt(this.totalTime / 60 )
+            if(minuts < 10) minuts = '0' + minuts
+            let seconds = this.totalTime - minuts * 60 
+            if(seconds < 10) seconds = '0' + seconds
+            this.timeStr = minuts + ':' + seconds
+            if(this.totalTime == 3600 ){
                 clearInterval(this.interval)
                 this.$swal({
                     text: 'Урок завершен',

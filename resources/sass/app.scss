@@ -25,7 +25,7 @@ nav.navbar-dark{
 nav.navbar-light .nav-link{
     color: #999;
 }
-.card-header{
+.card-header, .card-footer{
     background: transparent;
 }
 .dashboard__card__icon{
@@ -56,6 +56,9 @@ nav.navbar-light .nav-link{
 .front-tile{
     height: 350px;
     overflow: auto;
+}
+.sidebar-open .navbar-brand{
+    text-align: center;
 }
 .dashboard{
     .navbar-brand {
@@ -280,4 +283,22 @@ nav.navbar-light .nav-link{
     font-weight: normal;
     z-index: 10;
     padding: 2px 10px;
+}
+.board-container{
+    overflow: hidden;
+}
+.btn.btn-icon{
+    width: 37px;
+    height: 37px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    &.btn-sm{
+        width: 27px;
+        height: 27px;
+    }
 }

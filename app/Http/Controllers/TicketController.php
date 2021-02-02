@@ -17,17 +17,21 @@ class TicketController extends Controller
         $data = $request->only('text');
         $data['user_id'] = auth()->id();
         $ticket = Ticket::create($data);
+        $ticket->status = 'user';
         return $ticket;
+    }
+    public function getMessages(Ticket $ticket){
+        return $ticket->messages;
     }
     public function reply(Request $request, Ticket $ticket){
         $text = $request->text;
-        $ticket->status = 'user';
+        $ticket->status = auth()->user()->role->name == 'admin' ? 'admin' : 'user';
         $ticket->save();
-        $ticket->messages()->create([
+        $message = $ticket->messages()->create([
             'user_id' => auth()->id(),
             'text' => $text
         ]);
-        return back();
+        return $message->load('user');
     }
     public function close(Tiket $ticket){
         $ticket->status = 'closed';

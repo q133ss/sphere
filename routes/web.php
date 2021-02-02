@@ -31,6 +31,7 @@ Route::group([
     Route::view('/teacher_dashboard/tickets', 'tickets.index')->name('teacher.tickets.index');
     Route::view('/admin_dashboard/tickets', 'tickets.index')->name('admin.tickets.index');
     Route::post('/tickets/{ticket}/reply', 'TicketController@reply');
+    Route::get('/tickets/{ticket}/getMessages', 'TicketController@getMessages');
     Route::post('/tickets/{ticket}/close', 'TicketController@close');
     Route::apiResource('/tickets', 'TicketController')->only(['index', 'store']);
     

@@ -26,6 +26,7 @@ Vue.component('tickets', require('./components/Tickets.vue').default)
 Vue.component("video-chat", require("./components/VideoChat.vue").default);
 Vue.component("repetitors-list", require("./components/RepetitorsList.vue").default);
 Vue.component("button-timer", require("./components/ButtonTimer.vue").default);
+Vue.component("profile", require("./components/Profile.vue").default);
 Vue.component("chat", require("./components/Chat.vue").default);
 import VueMoment from 'vue-moment'
 Vue.use(VueMoment, { moment })

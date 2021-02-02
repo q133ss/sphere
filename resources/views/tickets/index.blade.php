@@ -5,5 +5,5 @@
 @stop
 
 @section('content')
-<tickets admin="{{auth()->user()->isAdmin()}}"></tickets>
+<tickets admin="{{auth()->user()->isAdmin()}}" myid="{{auth()->id()}}"></tickets>
 @stop
