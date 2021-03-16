@@ -19,13 +19,12 @@ class MaterialController extends Controller
     public function store(Request $request){
         $request->validate([
             'name' => 'required|string|max:255',
-            'price' => 'nullable|numeric|min:0',
             'media' => 'array|max:25',
             'media.*' => 'mimes:audio/mpeg,mpga,mp3,wav',
             'book' => 'file|mimes:pdf|max:8192',
             'workbook' => 'file|mimes:pdf||max:8192'
         ]);
-        $material = Material::create($request->only(['name', 'price', 'available', 'subject_id']));
+        $material = Material::create($request->only(['name', 'subject_id']));
         if($request->has('book')){
             $material->files()->create($this->getFileItem($request->file('book'), 'book', $material->id));
         }

@@ -28,9 +28,9 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
-            'phone' => ['required_if:role_id,3', 'nullable', 'string', 'max:255', 'unique:users'],
+            // 'phone' => ['required_if:role_id,3', 'nullable', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
     }
     protected function create(array $data)
@@ -40,11 +40,9 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'lastname' => $data['lastname'],
             'surname' => $data['surname'],
-            'phone' => $data['phone'],
-            'name' => $data['name'],
+            // 'phone' => $data['phone'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        session()->flash('one', 'register');
     }
 }

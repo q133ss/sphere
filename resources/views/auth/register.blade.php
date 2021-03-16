@@ -20,7 +20,8 @@
                     </div> <!-- /.title-area -->
                     <p class="or-text"><span>Регистрация</span></p>
 
-                    <form action="#" id="signUp-form">
+                    <form action="{{route('register')}}" id="signUp-form" method="post">
+                        @csrf
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="input-group">
@@ -49,7 +50,7 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <input type="password" name="password" required>
-                                    <label>Паролька</label>
+                                    <label>Пароль</label>
                                 </div> <!-- /.input-group -->
                             </div> <!-- /.col- -->
                         </div> <!-- /.row -->
@@ -60,13 +61,13 @@
                             <ul class="acType-list">
                                 <li>
                                     <div>
-                                        <input type="radio" name="role" value="student" id="student">
+                                        <input type="radio" name="role_id" value="2" id="student">
                                         <label for="student">Я ученик</label>
                                     </div>
                                 </li>
                                 <li>
                                     <div>
-                                        <input type="radio" name="role" value="teacher" id="teacher">
+                                        <input type="radio" name="role_id" value="3" id="teacher">
                                         <label for="teacher">Я преподаватель</label>
                                     </div>
                                 </li>

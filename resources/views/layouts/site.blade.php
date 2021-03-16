@@ -139,10 +139,9 @@
 							<div class="col-lg-3 col-sm-6 col-12 footer-list">
 								<h5 class="footer-title">Информация</h5>
 								<ul>
-									<li><a href="#">Политика</a></li>
-									<li><a href="#">Соглашение</a></li>
-									<li><a href="#">Реквизиты</a></li>
-									<li><a href="#">Сотрудничество</a></li>
+									<li><a href="{{route('oferta')}}">Оферта</a></li>
+									<li><a href="{{route('consent')}}">Соглашение</a></li>
+									<li><a href="{{route('pravila')}}">Сотрудничество</a></li>
 									<li><a href="#">Пресс-центр</a></li>
 								</ul>
 							</div> <!-- /.footer-list -->
@@ -154,6 +153,8 @@
 									<li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
 									<li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
 								</ul>
+								<hr>
+								<img src="/images/visa-mastercard-logo.png" alt="Visa MasterCard" class="img-responsive" style="max-width: 150px">
 							</div>
 						</div> <!-- /.row -->
 					</div> <!-- /.container -->

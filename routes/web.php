@@ -9,6 +9,9 @@ Route::get('/profile', function(){
     return redirect()->route(auth()->user()->role->name . '.profile');
 })->middleware(['auth']);
 Route::get('/faq', 'HomeController@faq')->name('faq');
+Route::view('/consent', 'site.consent')->name('consent');
+Route::view('/pravila', 'site.pravila')->name('pravila');
+Route::view('/oferta', 'site.oferta')->name('oferta');
 Route::get('/about', 'HomeController@about')->name('about');
 Route::get('/posts', 'HomeController@posts')->name('posts.index');
 Route::get('/posts/{post}', 'HomeController@post')->name('posts.show');

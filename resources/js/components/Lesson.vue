@@ -45,6 +45,14 @@
                                     </div>
                                 </div>
                             </span>
+                            <span>
+                                <button class="btn btn-icon btn-outline-secondary" data-toggle="dropdown">#</button>
+                                <div class="dropdown-menu">
+                                    <a href="#" class="dropdown-item" @click.prevent="setCanvasType('empty')">Чистый лист</a>
+                                    <a href="#" class="dropdown-item" @click.prevent="setCanvasType('grid')">Клетка</a>
+                                    <a href="#" class="dropdown-item" @click.prevent="setCanvasType('line')">Линейка</a>
+                                </div>
+                            </span>
                             <div class="float-right">
                                 <button class="btn btn-icon btn-outline-secondary" @click="toggleFullScreen"><i class="fa fa-arrows-alt"></i></button>
                             </div>
@@ -166,6 +174,7 @@ export default {
             canvasMode: 'draw',
             canvasColors: [ 'black', 'blue', 'green', 'red', 'brown', 'pink', 'yellow', 'orange', 'teal'],
             canvasColor: 'black',
+            canvasType: 'empty',
             lastTarget: false,
             selectedObject: false,
             materialsListActive: false,
@@ -198,10 +207,19 @@ export default {
             this.fullscreen = !this.fullscreen
             this.calcCanvasSize()
         },
+        setCanvasType(type){
+            this.canvasType = type
+            if(type == 'empty')
+                this.canvas.setBackgroundColor('rgba(255, 255, 255, 1)', this.canvas.renderAll.bind(this.canvas));
+            else if(type == 'grid')
+                this.canvas.setBackgroundColor({source: '/images/patterns/2.png'}, this.canvas.renderAll.bind(this.canvas));
+            else if(type == 'line')
+                this.canvas.setBackgroundColor({source: '/images/patterns/1.png'}, this.canvas.renderAll.bind(this.canvas));
+            
+        },
         calcCanvasSize(){
             const width = this.$refs.canvasScreen.clientWidth
             const height = this.fullscreen ? (this.$refs.canvasScreen.clientHeight - 46) : this.height;
-            console.log(height)
             this.canvas.setWidth( width );
             this.canvas.setHeight( height );
             this.canvas.calcOffset();
@@ -349,6 +367,7 @@ export default {
 		},
 		clear(){
 			this.canvas.clear();
+            this.setCanvasType(this.canvasType)
 			this.boardChannel.trigger('client-clear', {});
         },
         generateId(){
@@ -410,7 +429,7 @@ export default {
         // //////////////////////////////////////////////////
         this.width = $('.board-container').width()
         $(window).resize(this.calcCanvasSize);
-        this.canvas = new fabric.Canvas(this.$refs.boardCanvas, { height: this.height,  width: this.width})
+        this.canvas = new fabric.Canvas(this.$refs.boardCanvas, { height: this.height,  width: this.width, preserveObjectStacking: true})
         this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas)
         this.canvas.freeDrawingBrush.width = 4;
         this.canvas.freeDrawingBrush.color = 'black'

@@ -35,7 +35,7 @@
 										<div class="col-12">
 											<div class="input-group">
 												<input type="password" name="password" required>
-												<label>Паролька</label>
+												<label>Пароль</label>
 											</div> <!-- /.input-group -->
 										</div> <!-- /.col- -->
 									</div> <!-- /.row -->
@@ -44,7 +44,7 @@
 											<input type="checkbox" id="remember" name="remember">
 											<label for="remember">Запомнить меня</label>
 										</div>
-										<a href="{{route('password.request')}}">Забыли парольку?</a>
+										<a href="{{route('password.request')}}">Забыли пароль?</a>
 									</div>
 									<button class="theme-btn solid-button-one button-rose radius3">Войти</button>
 								</form>

@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
-use App\Faq;
 class HomeController extends Controller
 {
     public function faq(){
-        $items = Faq::all();
-        return view('site.faq', compact('items'));
+        return view('site.faq');
     }
     public function about(){
         return view('site.about');
