@@ -21,8 +21,8 @@ export default {
         this.checkStatus()
         this.updateTime()
         this.timer = setInterval( () => {
-            this.checkStatus()
             this.updateTime()
+            this.checkStatus()
         }, 60*1000)
     },
     methods: {
@@ -41,7 +41,6 @@ export default {
             else this.status = 'done'
             if(['done', 'success', 'canceled'].indexOf(this.status) > -1){
                 this.closed = true;
-                clearInterval(this.timer);
             }
         },
     }

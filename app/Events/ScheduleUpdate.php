@@ -10,19 +10,14 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class StartVideoChat implements ShouldBroadcast
+class ScheduleUpdate implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $data;
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct($data)
+    public $teacher_id;
+    public function __construct($teacher_id)
     {
-        $this->data = $data;
+        $this->teacher_id = $teacher_id;
     }
 
     /**
@@ -32,6 +27,6 @@ class StartVideoChat implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('presence-video-channel');
+        return new PresenceChannel('App.Schedule.' . $this->teacher_id);
     }
 }

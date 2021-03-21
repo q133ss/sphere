@@ -24,6 +24,9 @@ class UserController extends Controller
             'photo' => 'nullable|image|max:2048'
         ]);
     }
+    public function getSubjects(){
+        return auth()->user()->subjects;
+    }
     public function update(Request $request){
         $user = auth()->user();
         $validator = [

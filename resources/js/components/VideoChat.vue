@@ -1,346 +1,272 @@
 <template>
-<div class="card mb-1">
-  <div class="card-header p-1 d-flex justify-content-between align-items-center">
-    <span>Видеотрансляция</span>
-    <div class="float-right">
-      <div v-if="callPlaced">
-        <button type="button" class="btn mx-1 btn-sm btn-info" @click="toggleMuteAudio"><i class="fa" :class="{ 'fa-microphone': !mutedAudio, 'fa-microphone-slash': mutedAudio}"></i></button>
-        <button type="button" class="btn mx-1 btn-sm btn-primary" @click="toggleMuteVideo"><i class="fa" :class="{ 'fa-eye': !mutedVideo, 'fa-eye-slash': mutedVideo}"></i></button>
-        <button type="button" class="btn mx-1 btn-sm btn-danger" @click="endCall"><i class="fa fa-times"></i></button>
-      </div>
-      <div v-else>
-        <button type="button" class="btn btn-sm btn-success" v-for="user in allusers" :key="user.id" @click="placeVideoCall(user.id, user.name)"><i class="fa fa-volume-control-phone"></i> {{ user.name }} <span class="badge badge-light">{{getUserOnlineStatus(user.id)}}</span></button>
-      </div>
-    </div>
-  </div>
-  <div class="card-body p-1">
-    <div id="lesson-video-container" class="position-relative">
-      <div v-if="callPlaced">
-        <video id="localVideo" ref="userVideo" muted playsinline autoplay class="cursor-pointer" :class="isFocusMyself === true ? 'user-video' : 'partner-video'" @click="toggleCameraArea"/>
-        <video id="remoteVideo" ref="partnerVideo" playsinline autoplay class="cursor-pointer" :class="isFocusMyself === true ? 'partner-video' : 'user-video'" @click="toggleCameraArea" v-if="videoCallParams.callAccepted" />
-      </div>
-      <div class="partner-video" v-else>
-        <div v-if="callPartner" class="column items-center q-pt-xl">
-          <div class="col q-gutter-y-md text-center">
-            <p class="q-pt-md"><strong>{{ callPartner }}</strong></p>
-            <p>Идет вызов...</p>
-          </div>
-        </div>
-      </div>
-      <div class="text-center" v-if="incomingCallDialog">
-        <p>Входящий вызов от <strong>{{ callerDetails.name }}</strong></p>
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-sm btn-danger" @click="declineCall">Сброс</button>
-            <button type="button" class="btn btn-sm btn-success" @click="acceptCall">Принять</button>
-          </div>
-      </div>
-    </div>
-  </div>
-</div>
+	<div class="card mb-1">
+		<div class="card-header p-1 d-flex justify-content-between align-items-center">
+			<span>Видеотрансляция</span>
+			<div class="float-right">
+				<div v-if="callPlaced">
+					<button type="button" class="btn mx-1 btn-sm btn-info" @click="toggleMuteAudio"><i class="fa" :class="{ 'fa-microphone': !mutedAudio, 'fa-microphone-slash': mutedAudio}"></i></button>
+					<button type="button" class="btn mx-1 btn-sm btn-primary" @click="toggleMuteVideo"><i class="fa" :class="{ 'fa-eye': !mutedVideo, 'fa-eye-slash': mutedVideo}"></i></button>
+					<button type="button" class="btn mx-1 btn-sm btn-danger" @click="endCall"><i class="fa fa-times"></i></button>
+				</div>
+				<div v-else>
+					<button type="button" class="btn btn-sm" @click="callUser" :disabled="!userIsOnline || callMe" :class="{'btn-success': userIsOnline, 'btn-danger': !userIsOnline}">
+						<i class="fa fa-volume-control-phone"></i> {{ user.name }}
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="card-body p-1">
+			<div id="lesson-video-container" class="position-relative">
+			<div v-show="callPlaced">
+				<video id="localVideo" ref="userVideo" muted playsinline autoplay class="cursor-pointer" :class="isFocusMyself === true ? 'user-video' : 'partner-video'" @click="toggleCameraArea"/>
+				<video id="remoteVideo" ref="partnerVideo" playsinline autoplay class="cursor-pointer" :class="isFocusMyself === true ? 'partner-video' : 'user-video'" @click="toggleCameraArea" v-if="callAccepted" />
+			</div>
+			<div class="partner-video">
+				<div v-if="callFromMe" class="column items-center q-pt-xl">
+					<div class="col q-gutter-y-md text-center">
+						<p>Идет вызов...</p>
+					</div>
+				</div>
+				<div v-if="callDecline" class="column items-center q-pt-xl">
+					<div class="col q-gutter-y-md text-center">
+						<p>Звонок отменен пользователем</p>
+					</div>
+				</div>
+			</div>
+			<div class="text-center" v-if="callMe">
+				<p>Входящий вызов</p>
+				<div class="btn-group" role="group">
+					<button type="button" class="btn btn-sm btn-danger" @click="declineCall">Сброс</button>
+					<button type="button" class="btn btn-sm btn-success" @click="acceptCall">Принять</button>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
 import Peer from "simple-peer"; 
 import { getPermissions } from "../helpers";
 export default {
-  props: [
-    "allusers",
-    "authuserid",
-    // "turn_url",
-    "turn_username",
-    "turn_credential",
-  ],
-  data() {
-    return {
-      turn_url: [
-        'stun:stun.l.google.com:19302',
-        'stun:global.stun.twilio.com:3478'
-      ],
-      isFocusMyself: true,
-      callPlaced: false,
-      callPartner: null,
-      mutedAudio: false,
-      mutedVideo: false,
-      videoCallParams: {
-        users: [],
-        stream: null,
-        receivingCall: false,
-        caller: null,
-        callerSignal: null,
-        callAccepted: false,
-        channel: null,
-        peer1: null,
-        peer2: null,
-      },
-    };
-  },
+	props: ['user', 'auth', 'lesson_id'],
+	data() {
+		return {
+			audioIn: false,
+			audioOut: false,
+			turn_url: [
+				'stun:stun.l.google.com:19302',
+				'stun:global.stun.twilio.com:3478'
+			],
+			callFromMe: false,
+			callMe: false,
+			callDecline: false,
+			channel: false,
+			userIsOnline: false,
+			stream: false,
+			isFocusMyself: true,
+			callPlaced: false,
+			callAccepted: false,
+			callPartner: null,
+			mutedAudio: false,
+			mutedVideo: false,
+			peer: null,
+			signal: false,
+		};
+	},
 
-  mounted() {
-    this.initializeChannel(); // this initializes laravel echo
-    this.initializeCallListeners(); // subscribes to video presence channel and listens to video events
-  },
-  computed: {
-    incomingCallDialog() {
-      return this.videoCallParams.receivingCall && this.videoCallParams.caller !== this.authuserid
-    },
-    callerDetails() {
-      if (
-        this.videoCallParams.caller &&
-        this.videoCallParams.caller !== this.authuserid
-      ) {
-        const incomingCaller = this.allusers.filter(
-          (user) => user.id === this.videoCallParams.caller
-        );
+	mounted() {
+		this.channel = Echo.join("App.Models.Lesson." + this.lesson_id + '.Video')
+		.here(users => {
+			if(users.findIndex( u => u.id == this.user.id) > -1) this.userIsOnline = true
+		})
+		.joining( user => {
+			this.userIsOnline = true
+			this.$toast.success(user.name + ' присоединился к уроку')
+		})
+		.leaving( user => {
+			this.callFromMe = false
+			this.callPlaced = false
+			this.userIsOnline = false
+			this.$toast.warning(user.name + ' покинул урок')
+		})
+		.listenForWhisper("callDecline", data => {
+			this.callDecline = true;
+			this.callFromMe = false;
+			this.callPlaced = false;
+			this.stop('out');
+		})
+		.listenForWhisper("callCancel", data => {
+			this.callMe = false;
+			this.stop('in')
+		})
+		.listenForWhisper('callAccept', data => {
+			this.callAccepted = true;
+			this.callFromMe = false;
+			this.signal = data
+			this.peer.signal(this.signal);
+			this.stop('out')
+		})
+		.listenForWhisper("call", data => {
+			this.callMe = true;
+			this.signal = data
+			this.play('in')
+		});
+	},
+	methods: {
+		stop(type){
+			const target = type == 'in' ? this.audioIn : this.audioOut
+			if(!target) return false
+			target.currentTime = 0;
+			target.pause();
+		},
+		play(type){
+			if(type == 'in' && !this.audioIn){
+				this.audioIn = new Audio('/sounds/in.mp3')
+				this.audioIn.addEventListener('ended', function() {
+					this.currentTime = 0;
+					this.play();
+				}, false);
+			}else if(type == 'out' && !this.audioOut){
+				this.audioOut = new Audio('/sounds/out.mp3')
+				this.audioOut.addEventListener('ended', function() {
+					this.currentTime = 0;
+					this.play();
+				}, false);
+			}
+			type == 'in' ? this.audioIn.play() : this.audioOut.play()
+		},
+		getMediaPermission() {
+			return getPermissions()
+			.then( stream => {
+				this.stream = stream;
+				if (this.$refs.userVideo) {
+					this.$refs.userVideo.srcObject = stream;
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		},
+		async callUser() {
+			this.callFromMe = true;
+			this.callPlaced = true;
+			this.callDecline = false;
+			this.play('out');
+			await this.getMediaPermission();
+			this.peer = new Peer({
+				initiator: true,
+				trickle: false,
+				stream: this.stream,
+				config: {
+					iceServers: [
+						{
+							urls: this.turn_url,
+							username: this.auth.name,
+							credential: this.auth.id,
+						},
+					],
+				},
+			});
 
-        return {
-          id: this.videoCallParams.caller,
-          name: `${incomingCaller[0].name}`,
-        };
-      }
-      return null;
-    },
-  },
-  methods: {
-    initializeChannel() {
-      this.videoCallParams.channel = window.Echo.join("presence-video-channel");
-    },
+			this.peer.on("signal", data => {
+				this.channel.whisper('call', data)
+			});
 
-    getMediaPermission() {
-      return getPermissions()
-        .then((stream) => {
-          this.videoCallParams.stream = stream;
-          if (this.$refs.userVideo) {
-            this.$refs.userVideo.srcObject = stream;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+			this.peer.on("stream", stream => {
+				if (this.$refs.partnerVideo) {
+					this.$refs.partnerVideo.srcObject = stream;
+				}
+			});
+			this.peer.on("close", () => {
+				this.callPlaced = false
+				this.peer.destroy()
+			});
+		},
 
-    initializeCallListeners() {
-      this.videoCallParams.channel.here((users) => {
-        this.videoCallParams.users = users;
-      });
+		async acceptCall() {
+			this.callPlaced = true;
+			this.callAccepted = true;
+			this.callMe = false;
+			this.stop('in');
+			await this.getMediaPermission();
+			this.peer = new Peer({
+				initiator: false,
+				trickle: false,
+				stream: this.stream,
+				config: {
+					iceServers: [
+						{
+							urls: this.turn_url,
+							username: this.auth.name,
+							credential: this.auth.id,
+						},
+					],
+				},
+			});
+			this.peer.on("signal", data => {
+				this.channel.whisper('callAccept', data)
+			});
 
-      this.videoCallParams.channel.joining((user) => {
-        // check user availability
-        this.$toast.success(user.name + ' присоединился к уроку')
-        const joiningUserIndex = this.videoCallParams.users.findIndex(
-          (data) => data.id === user.id
-        );
-        if (joiningUserIndex < 0) {
-          this.videoCallParams.users.push(user);
-        }
-      });
+			this.peer.on("stream", stream => {
+				this.$refs.partnerVideo.srcObject = stream;
+			});
+			this.peer.on("close", () => {
+				this.callPlaced = false
+				this.peer.destroy()
+			});
+			this.peer.signal(this.signal);
+		},
+		toggleCameraArea() {
+			if (this.callAccepted) {
+				this.isFocusMyself = !this.isFocusMyself;
+			}
+		},
+		declineCall() {
+			this.callMe = false;
+			this.stop('in');
+			this.channel.whisper('callDecline')
+		},
 
-      this.videoCallParams.channel.leaving((user) => {
-        this.$toast.warning(user.name + ' покинул урок')
-        const leavingUserIndex = this.videoCallParams.users.findIndex(
-          (data) => data.id === user.id
-        );
-        this.videoCallParams.users.splice(leavingUserIndex, 1);
-      });
-      // listen to incomming call
-      this.videoCallParams.channel.listen("StartVideoChat", ({ data }) => {
-        if (data.type === "incomingCall") {
-          // add a new line to the sdp to take care of error
-          const updatedSignal = {
-            ...data.signalData,
-            sdp: `${data.signalData.sdp}\n`,
-          };
+		toggleMuteAudio() {
+			if (this.mutedAudio) {
+				this.$refs.userVideo.srcObject.getAudioTracks()[0].enabled = true;
+				this.mutedAudio = false;
+			} else {
+				this.$refs.userVideo.srcObject.getAudioTracks()[0].enabled = false;
+				this.mutedAudio = true;
+			}
+		},
 
-          this.videoCallParams.receivingCall = true;
-          this.videoCallParams.caller = data.from;
-          this.videoCallParams.callerSignal = updatedSignal;
-        }
-      });
-    },
-    async placeVideoCall(id, name) {
-      this.callPlaced = true;
-      this.callPartner = name;
-      await this.getMediaPermission();
-      this.videoCallParams.peer1 = new Peer({
-        initiator: true,
-        trickle: false,
-        stream: this.videoCallParams.stream,
-        config: {
-          iceServers: [
-            {
-              urls: this.turn_url,
-              username: this.turn_username,
-              credential: this.turn_credential,
-            },
-          ],
-        },
-      });
+		toggleMuteVideo() {
+			if (this.mutedVideo) {
+				this.$refs.userVideo.srcObject.getVideoTracks()[0].enabled = true;
+				this.mutedVideo = false;
+			} else {
+				this.$refs.userVideo.srcObject.getVideoTracks()[0].enabled = false;
+				this.mutedVideo = true;
+			}
+		},
 
-      this.videoCallParams.peer1.on("signal", (data) => {
-        // send user call signal
-        axios
-          .post("/video/call-user", {
-            user_to_call: id,
-            signal_data: data,
-            from: this.authuserid,
-          })
-          .then(() => {})
-          .catch((error) => {
-            console.log(error);
-          });
-      });
-
-      this.videoCallParams.peer1.on("stream", (stream) => {
-        console.log("call streaming");
-        if (this.$refs.partnerVideo) {
-          this.$refs.partnerVideo.srcObject = stream;
-        }
-      });
-
-      this.videoCallParams.peer1.on("connect", () => {
-        console.log("peer connected");
-      });
-
-      this.videoCallParams.peer1.on("error", (err) => {
-        console.log(err);
-      });
-
-      this.videoCallParams.peer1.on("close", () => {
-        console.log("call closed caller");
-      });
-
-      this.videoCallParams.channel.listen("StartVideoChat", ({ data }) => {
-        if (data.type === "callAccepted") {
-          if (data.signal.renegotiate) {
-            console.log("renegotating");
-          }
-          if (data.signal.sdp) {
-            this.videoCallParams.callAccepted = true;
-            const updatedSignal = {
-              ...data.signal,
-              sdp: `${data.signal.sdp}\n`,
-            };
-            this.videoCallParams.peer1.signal(updatedSignal);
-          }
-        }
-      });
-    },
-
-    async acceptCall() {
-      this.callPlaced = true;
-      this.videoCallParams.callAccepted = true;
-      await this.getMediaPermission();
-      this.videoCallParams.peer2 = new Peer({
-        initiator: false,
-        trickle: false,
-        stream: this.videoCallParams.stream,
-        config: {
-          iceServers: [
-            {
-              urls: this.turn_url,
-              username: this.turn_username,
-              credential: this.turn_credential,
-            },
-          ],
-        },
-      });
-      this.videoCallParams.receivingCall = false;
-      this.videoCallParams.peer2.on("signal", (data) => {
-        axios
-          .post("/video/accept-call", {
-            signal: data,
-            to: this.videoCallParams.caller,
-          })
-          .then(() => {})
-          .catch((error) => {
-            console.log(error);
-          });
-      });
-
-      this.videoCallParams.peer2.on("stream", (stream) => {
-        this.videoCallParams.callAccepted = true;
-        this.$refs.partnerVideo.srcObject = stream;
-      });
-
-      this.videoCallParams.peer2.on("connect", () => {
-        console.log("peer connected");
-        this.videoCallParams.callAccepted = true;
-      });
-
-      this.videoCallParams.peer2.on("error", (err) => {
-        console.log(err);
-      });
-
-      this.videoCallParams.peer2.on("close", () => {
-        console.log("call closed accepter");
-      });
-
-      this.videoCallParams.peer2.signal(this.videoCallParams.callerSignal);
-    },
-    toggleCameraArea() {
-      if (this.videoCallParams.callAccepted) {
-        this.isFocusMyself = !this.isFocusMyself;
-      }
-    },
-    getUserOnlineStatus(id) {
-      const onlineUserIndex = this.videoCallParams.users.findIndex(
-        (data) => data.id === id
-      );
-      if (onlineUserIndex < 0) {
-        return "Не в сети";
-      }
-      return "В сети";
-    },
-    declineCall() {
-      this.videoCallParams.receivingCall = false;
-    },
-
-    toggleMuteAudio() {
-      if (this.mutedAudio) {
-        this.$refs.userVideo.srcObject.getAudioTracks()[0].enabled = true;
-        this.mutedAudio = false;
-      } else {
-        this.$refs.userVideo.srcObject.getAudioTracks()[0].enabled = false;
-        this.mutedAudio = true;
-      }
-    },
-
-    toggleMuteVideo() {
-      if (this.mutedVideo) {
-        this.$refs.userVideo.srcObject.getVideoTracks()[0].enabled = true;
-        this.mutedVideo = false;
-      } else {
-        this.$refs.userVideo.srcObject.getVideoTracks()[0].enabled = false;
-        this.mutedVideo = true;
-      }
-    },
-
-    stopStreamedVideo(videoElem) {
-      const stream = videoElem.srcObject;
-      const tracks = stream.getTracks();
-      tracks.forEach((track) => {
-        track.stop();
-      });
-      videoElem.srcObject = null;
-    },
-    endCall() {
-      // if video or audio is muted, enable it so that the stopStreamedVideo method will work
-      if (!this.mutedVideo) this.toggleMuteVideo();
-      if (!this.mutedAudio) this.toggleMuteAudio();
-      this.stopStreamedVideo(this.$refs.userVideo);
-      if (this.authuserid === this.videoCallParams.caller) {
-        this.videoCallParams.peer1.destroy();
-      } else {
-        this.videoCallParams.peer2.destroy();
-      }
-      this.videoCallParams.channel.pusher.channels.channels[
-        "presence-presence-video-channel"
-      ].disconnect();
-
-      setTimeout(() => {
-        this.callPlaced = false;
-      }, 3000);
-    },
-  },
+		stopStreamedVideo(videoElem) {
+			const stream = videoElem.srcObject;
+			const tracks = stream.getTracks();
+			tracks.forEach((track) => {
+				track.stop();
+			});
+			videoElem.srcObject = null;
+		},
+		endCall() {
+			this.stop('out')
+			if (!this.mutedVideo) this.toggleMuteVideo();
+			if (!this.mutedAudio) this.toggleMuteAudio();
+			this.stopStreamedVideo(this.$refs.userVideo);
+			if (this.peer) this.peer.destroy();
+			this.callPlaced = false;
+			this.callFromMe = false
+			this.channel.whisper('callCancel')
+		},
+	},
 };
 </script>
 

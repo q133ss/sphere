@@ -7,7 +7,6 @@
                     <div class="float-right">
                         <button class="btn btn-sm btn-icon btn-outline-secondary"><i class="fa fa-plus"></i></button>
                         <button class="btn btn-sm btn-icon btn-outline-secondary" @click="save" v-if="role == 'teacher'"><i class="fa fa-save"></i></button>
-                        <!-- <button class="btn btn-sm btn-success" @click="done" v-if="!lesson.done">Завершить урок</button> -->
                     </div>
                 </div>
                 <div class="col-md-4 d-flex align-items-center">
@@ -34,15 +33,24 @@
                             <button class="btn btn-icon mr-1 btn-outline-secondary" @click="clear" v-if="role == 'teacher'"><i class="fa fa-trash text-danger"></i></button>
                             <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'eraser'}" @click="setCanvasMode('eraser')"><i class="fa fa-eraser text-warning"></i></button>
                             <button class="btn btn-icon mr-1 btn-outline-secondary" @click="canvasUndo"><i class="fa fa-undo text-warning"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'circle'}" @click="setCanvasMode('circle')"><i class="fa fa-circle-thin " :style="{color: canvasColor}"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'rect'}" @click="setCanvasMode('rect')"><i class="fa fa-square-o " :style="{color: canvasColor}"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'line'}" @click="setCanvasMode('line')"><i class="fa fa-minus " :style="{color: canvasColor}"></i></button>
                             <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'draw'}" @click="setCanvasMode('draw')"><i class="fa fa-pencil" :style="{color: canvasColor}"></i></button>
                             <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'write'}" @click="setCanvasMode('write')"><i class="fa fa-font" :style="{color: canvasColor}"></i></button>
                             <button class="btn btn-icon mr-1 btn-outline-secondary" :class="{'active': canvasMode == 'select'}" @click="setCanvasMode('select')"><i class="fa fa-arrows-h"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" @click="moveUp"><i class="fa fa-chevron-up"></i></button>
+                            <button class="btn btn-icon mr-1 btn-outline-secondary" @click="moveDown"><i class="fa fa-chevron-down"></i></button>
                             <span>
-                                <button class="btn btn-icon btn-outline-secondary" data-toggle="dropdown" ><i class="fa fa-circle" :style="{color: canvasColor}"></i></button>
+                                <button class="btn btn-icon btn-outline-secondary" data-toggle="dropdown"><i class="fa fa-circle" :style="{color: canvasColor}"></i></button>
                                 <div class="dropdown-menu">
-                                    <div class="dropdown-item">
-                                        <button class="btn btn-sm btn-icon mx-1" v-for="color in canvasColors" :key="color" @click="setCanvasColor(color)" :style="{background: color}"></button>
-                                    </div>
+                                    <button class="btn btn-sm btn-icon mx-1" v-for="color in canvasColors" :key="color" @click="setCanvasColor(color)" :style="{background: color}"></button>
+                                    <span class="dropdown">
+                                        <button class="btn btn-sm btn-icon mx-1" @click.stop="showMoreColors"><i class="fa fa-plus"></i></button>
+                                        <div class="dropdown-menu" id="moreColors">
+                                            <color-picker v-model="canvasColor" @input="moreColorClickHandler"/>
+                                        </div>
+                                    </span>
                                 </div>
                             </span>
                             <span>
@@ -72,29 +80,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4">
-                    <video-chat v-if="lesson" :allusers="role == 'teacher' ? [lesson.student] : [lesson.teacher]" :authUserId="user_id"/>
-					<div>
-						<div class="card" id="lesson-chat-container" ref="chat">
-							<ul v-if="messages.length">
-								<li v-for="message in messages" :key="message.id" :class="{right: message.user.id == lesson.student_id}">
-									<span>
-										<p class="mb-1"><i class="small">{{message.user.name}}</i> <time class="small">{{message.created_at | moment('DD.MM.YYYY HH:mm')}}</time></p>
-										{{message.text}}
-									</span>
-								</li>
-							</ul>
-							<p v-else class="text-center text-muted">Пока никто ничего не написал</p>
-						</div>
-						<form @submit.prevent="send" class="d-block">
-							<div class="input-group">
-								<input v-model="text" class="form-control" :disabled="loading" placeholder="Сообщение">
-								<div class="input-group-append">
-									<button class="btn btn-primary" :disabled="loading"><i v-if="!loading" class="fa fa-send"></i><i class="fa fa-spinner fa-spin" v-else></i></button>
-								</div>
-							</div>
-						</form>
-					</div>
+				<div class="col-md-4" v-if="lesson">
+                    <video-chat v-if="lesson" :lesson_id="lesson.id" :user="role == 'teacher' ? lesson.student : lesson.teacher" :auth="role == 'teacher' ? lesson.teacher : lesson.student"/>
+					<chat-room :user_id="lesson.teacher.id == user_id ? lesson.student.id : lesson.teacher.id" :auth="lesson.teacher.id == user_id ? lesson.teacher : lesson.student"/>
 				</div>
 			</div>
         </div>
@@ -152,8 +140,14 @@
 </template>
 <script>
 import { fabric } from "fabric";
+import { Swatches } from 'vue-color'
+import ChatRoom from './ChatRoom'
 export default {
     props: ['user_id', 'role', 'lesson_id'],
+    components: {
+        'color-picker': Swatches,
+        ChatRoom
+    },
     data(){
         return {
             lesson: false,
@@ -163,9 +157,7 @@ export default {
             text: '',
             errors: {},
             uploadModel: {},
-			messages: [],
-			messageChannel: false,
-			boardChannel: false,
+			channel: false,
 			boardData: null,
             canvas: false,
             width: 0,
@@ -176,15 +168,31 @@ export default {
             canvasColor: 'black',
             canvasType: 'empty',
             lastTarget: false,
-            selectedObject: false,
             materialsListActive: false,
             fullscreen: false,
             progress: 0,
             totalTime: 500,
-            timeStr: ''
+            timeStr: '',
+            isDown: false,
+            drawingObject: false,
+            origX: 0,
+            origY: 0
         }
     },
     methods: {
+        moveUp(){
+            this.canvas.bringForward(this.canvas.getActiveObject())
+        },
+        moveDown(){
+            this.canvas.sendBackwards(this.canvas.getActiveObject())
+        },
+        showMoreColors(){
+            $('#moreColors').addClass('show');
+        },
+        moreColorClickHandler(color){
+            this.canvasColors.push(color.hex)
+            this.setCanvasColor(color.hex)
+        },
         toggleFullScreen(){
             if(this.fullscreen){
                 if (document.exitFullscreen) {
@@ -250,7 +258,7 @@ export default {
             if(this.remoteEvent){
                 this.remoteEvent = false
             }else{
-                this.boardChannel.trigger('client-play', file)
+                this.boardChannel.trigger('play', file)
             }
         },
         async done(){
@@ -284,16 +292,15 @@ export default {
                 this.canvas.hoverCursor = 'no-drop';
                 this.canvas.isDrawingMode = false
                 this.canvas.selection = false
+            }else if(this.canvasMode == 'circle' || this.canvasMode == 'line' || this.canvasMode == 'rect'){
+                this.canvas.hoverCursor = 'pointer';
+                this.canvas.isDrawingMode = false
+                this.canvas.selection = false
             }
         },
         canvasUndo(){
             var object = this.canvas.item(this.canvas.getObjects().length-1);
             this.canvas.remove(object);
-            // if(!this.remoteEvent){
-            //     this.boardChannel.trigger('client-undo', {})
-            // }else{
-            //     this.remoteEvent = false
-            // }
         },
         async destroyFile(file){
             try{
@@ -306,7 +313,9 @@ export default {
             fabric.Image.fromURL('/storage/' + file.src, obj => {
                 obj.scaleToWidth(this.width/2);
                 obj.set({ left: 5, top: 5});
-                this.canvas.add(obj); 
+                this.canvas.add(obj);
+                this.canvas.sendToBack(obj)
+                this.materialsListActive = false
             });
         },
         async addMaterial(){
@@ -344,21 +353,6 @@ export default {
                 this.errors = e.response.data.errors
             }
         },
-		async send(){
-            if(!this.text) return false
-            this.loading = true
-            try{
-                const {data} = await axios.post('/pusher/lessons/' + this.lesson.id + '/message', {text: this.text})
-                this.text = ''
-            }catch(e){}
-            finally{ this.loading = false}
-        },
-        scroll(){
-            setTimeout(() => {
-                const chat = this.$refs.chat
-                chat.scrollTop = chat.scrollHeight;
-            }, 100)
-        },
 		async save(){
             try{
                 await axios.put('/lessons/' + this.lesson.id + '/saveBoard', { data: JSON.stringify(this.canvas.toJSON())})
@@ -368,7 +362,7 @@ export default {
 		clear(){
 			this.canvas.clear();
             this.setCanvasType(this.canvasType)
-			this.boardChannel.trigger('client-clear', {});
+			this.boardChannel.trigger('clear', {});
         },
         generateId(){
             return `f${(~~(Math.random()*1e8)).toString(16)}`;
@@ -413,19 +407,46 @@ export default {
         next(isConfirmed);
     },
     beforeDestroy(){
-        pusher.unsubscribe('presence-lesson-channel-' + this.lesson_id)
+        Echo.leave('App.Models.Lesson.' + this.lesson.id)
     },
     async created(){
         this.interval = setInterval( this.timer, 1000 )
         const lesson = await axios.get('/lessons/' + this.lesson_id)
 		this.lesson = lesson.data
-        this.messages = this.lesson.messages
-        this.scroll();
-        this.messageChannel = pusher.subscribe('lesson.' + this.lesson_id);
-        this.messageChannel.bind('message', signal => {
-            this.messages.push(signal.message)
-            this.scroll();
-		})
+        this.channel = Echo.join('App.Models.Lesson.' + this.lesson_id)
+		.listenForWhisper('clear', signal => {
+			this.remoteEvent = true
+			this.clear()
+        })
+        .listenForWhisper('play', file => {
+            this.remoteEvent = true
+            this.play(file)
+        })
+        .listenForWhisper('add', obj => {
+            this.remoteEvent = true;
+            this.addRemoteObj(obj)
+        })
+        .listenForWhisper('undo', obj => {
+            this.remoteEvent = true;
+            this.canvasUndo()
+        })
+        .listenForWhisper('removed', obj => {
+            this.remoteEvent = true;
+            this.canvas.getObjects().forEach(o => {
+                if(o.name == obj.name) {
+                    this.canvas.remove(o);
+                }
+            })
+        })
+        .listenForWhisper('modified', obj => {
+            this.remoteEvent = true;
+            this.canvas.getObjects().forEach(o => {
+                if(o.name == obj.name) {
+                    this.canvas.remove(o);
+                    this.addRemoteObj(obj)
+                }
+            })
+        })
         // //////////////////////////////////////////////////
         this.width = $('.board-container').width()
         $(window).resize(this.calcCanvasSize);
@@ -441,14 +462,49 @@ export default {
         }
         this.canvas.on('object:modified', ({target}) => {
             if(!this.remoteEvent){
-                this.boardChannel.trigger('client-modified', target.toObject(['name']))
+                this.channel.whisper('modified', target.toObject(['name']))
             }else{
                 this.remoteEvent = false
             }
         })
+        this.canvas.on('mouse:move', (data) => { 
+            if(this.isDown && this.drawingObject){
+                if(this.canvasMode == 'circle'){
+                    this.drawingObject.set({
+                        radius: Math.abs(this.origX - data.absolutePointer.x)
+                    });
+                }else if(this.canvasMode == 'line'){
+                    this.drawingObject.set({
+                       x2: data.absolutePointer.x,
+                       y2: data.absolutePointer.y
+                    });
+                }else if(this.canvasMode == 'rect'){
+                    this.drawingObject.set({
+                       width: Math.abs(this.origX - data.absolutePointer.x),
+                       height: Math.abs(this.origY - data.absolutePointer.y)
+                    });
+                }
+                this.canvas.renderAll();
+            }
+        })
+        this.canvas.on('mouse:up', (data) => {
+            this.isDown = false
+            if(['circle', 'line', 'rect'].indexOf(this.canvasMode) > -1){
+                if(this.drawingObject) this.drawingObject.setCoords();
+                this.drawingObject.name = this.generateId();
+                this.channel.whisper('add', this.drawingObject.toObject(['name']))
+                this.drawingObject = false   
+            }
+        })
         this.canvas.on('mouse:down', (data) => {
-            if(this.canvasMode === 'eraser' && data.target) this.canvas.remove(data.target);
-            else if(this.canvasMode == 'write'){
+            if(['circle', 'line', 'rect'].indexOf(this.canvasMode) > -1){
+                this.isDown = true;
+            }
+            this.origX = data.absolutePointer.x;
+            this.origY = data.absolutePointer.y;
+            if(this.canvasMode === 'eraser' && data.target){
+                this.canvas.remove(data.target);
+            } else if(this.canvasMode == 'write'){
                 let text = new fabric.Textbox('', { left: data.absolutePointer.x, top: data.absolutePointer.y} );
                 text.set({ fill: this.canvasColor });
                 this.canvas.add(text);
@@ -456,19 +512,52 @@ export default {
                 text.enterEditing();
                 text.hiddenTextarea.focus();
                 this.setCanvasMode('select')
+            } else if(this.canvasMode == 'circle'){
+                this.drawingObject = new fabric.Circle({
+                    left: data.absolutePointer.x,
+                    top: data.absolutePointer.y,
+                    radius: 0,
+                    stroke: this.canvasColor,
+                    strokeWidth: 3,
+                    fill: ''
+                });
+                this.canvas.add(this.drawingObject);
+                this.canvas.setActiveObject(this.drawingObject);
+            } else if(this.canvasMode == 'line'){
+                this.drawingObject = new fabric.Line([data.absolutePointer.x, data.absolutePointer.y, data.absolutePointer.x + 1, data.absolutePointer.y + 1],{
+                    left: data.absolutePointer.x,
+                    top: data.absolutePointer.y,
+                    stroke: this.canvasColor,
+                    strokeWidth: 3,
+                    fill: ''
+                });
+                this.canvas.add(this.drawingObject);
+                this.canvas.setActiveObject(this.drawingObject);
+            } else if(this.canvasMode == 'rect'){
+                this.drawingObject = new fabric.Rect({
+                    left: data.absolutePointer.x,
+                    top: data.absolutePointer.y,
+                    width: 2,
+                    height: 2,
+                    fill: 'transparent',
+                    stroke: this.canvasColor,
+                    strokeWidth: 3,
+                });
+                this.canvas.add(this.drawingObject);
+                this.canvas.setActiveObject(this.drawingObject);
             }
         })
         this.canvas.on('object:added', ({target}) => {
-            if(!this.remoteEvent){
+            if(!this.remoteEvent && !this.isDown){
                 target.name = this.generateId();
-                this.boardChannel.trigger('client-add', target.toObject(['name']))
+                this.channel.whisper('add', target.toObject(['name']))
             }else{
                 this.remoteEvent = false
             }
         })
         this.canvas.on('object:removed', ({target}) => {
             if(!this.remoteEvent){
-                this.boardChannel.trigger('client-removed', {
+                this.channel.whisper('removed', {
                     name: target.name
                 })
             }else{
@@ -484,40 +573,6 @@ export default {
             this.canvas.setZoom(zoom);
             opt.e.preventDefault();
             opt.e.stopPropagation();
-        })
-		this.boardChannel = pusher.subscribe('presence-lesson-channel-' + this.lesson_id)
-		this.boardChannel.bind('client-clear', signal => {
-			this.remoteEvent = true
-			this.clear()
-        })
-        this.boardChannel.bind('client-play', file => {
-            this.remoteEvent = true
-            this.play(file)
-        })
-        this.boardChannel.bind('client-add', obj => {
-            this.remoteEvent = true;
-            this.addRemoteObj(obj)
-        })
-        this.boardChannel.bind('client-undo', obj => {
-            this.remoteEvent = true;
-            this.canvasUndo()
-        })
-        this.boardChannel.bind('client-removed', obj => {
-            this.remoteEvent = true;
-            this.canvas.getObjects().forEach(o => {
-                if(o.name == obj.name) {
-                    this.canvas.remove(o);
-                }
-            })
-        })
-        this.boardChannel.bind('client-modified', obj => {
-            this.remoteEvent = true;
-            this.canvas.getObjects().forEach(o => {
-                if(o.name == obj.name) {
-                    this.canvas.remove(o);
-                    this.addRemoteObj(obj)
-                }
-            })
         })
     }
 }

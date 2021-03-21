@@ -10,21 +10,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TeacherScheduleEvent implements ShouldBroadcast
+class ChatUsers implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $type;
-    public $events;
-    public $teacher_id;
-    public function __construct($teacher_id, $type, $events)
+    public function __construct()
     {
-        $this->type = $type;
-        $this->teacher_id = $teacher_id;
-        $this->events = $events;
+        //
     }
     public function broadcastOn()
     {
-        return new PrivateChannel('schedule-channel-' . $this->teacher_id);
+        return new PresenceChannel('App.Chat');
     }
 }

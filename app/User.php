@@ -12,15 +12,15 @@ class User extends Authenticatable
     protected $fillable = [
         'surname', 'name', 'lastname', 'phone', 'about', 'email', 'password', 'age', 'confirm_request', 'lesson_price', 'role_id'
     ];
-    protected $appends = ['full_name', 'photo'];
+    protected $appends = ['full_name', 'avatar'];
     protected $hidden = [
         'password', 'remember_token',
     ];
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function getPhotoAttribute($value){
-        return $value ? '/storage/' . $value : '/images/empty-photo.png';
+    public function getAvatarAttribute(){
+        return $this->photo ? '/storage/' . $this->photo : '/images/empty-photo.png';
     }
     public function isAdmin(){
         return $this->role_id == 1;

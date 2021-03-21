@@ -10,21 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class LessonMessageEvent implements ShouldBroadcast
+class ChatMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
-    public function __construct($message)
+    public $hash;
+    public function __construct($message, $hash)
     {
         $this->message = $message;
-    }
-    public function broadcastAs()
-    {
-        return 'message';
+        $this->hash = $hash;
     }
     public function broadcastOn()
     {
-        return ['lesson.'.$this->message->messageable_id];
+        return new PresenceChannel('App.Chat.Message.' . $this->hash);
     }
 }

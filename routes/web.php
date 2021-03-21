@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
+Broadcast::routes(["middleware" => "auth"]);
 
 Route::get('/', 'SiteController@index')->name('home');
 Route::get('/profile', function(){
@@ -15,6 +16,8 @@ Route::view('/oferta', 'site.oferta')->name('oferta');
 Route::get('/about', 'HomeController@about')->name('about');
 Route::get('/posts', 'HomeController@posts')->name('posts.index');
 Route::get('/posts/{post}', 'HomeController@post')->name('posts.show');
+
+
 Route::group([
     'middleware' => ['auth']
 ], function(){
@@ -38,9 +41,7 @@ Route::group([
     Route::post('/tickets/{ticket}/close', 'TicketController@close');
     Route::apiResource('/tickets', 'TicketController')->only(['index', 'store']);
     
-    Route::post('/pusher/auth', 'PusherController@auth');
-    Route::post('/pusher/lessons/{lesson}/message', 'PusherController@lessonMessage');
-    
+    Route::get('/subjects', 'UserController@getSubjects');
     Route::post('/notifications/read', 'NotificationController@read');
     Route::get('/notifications', 'NotificationController@index');
     Route::delete('/notifications/{notification}', 'NotificationController@destroy');
@@ -49,9 +50,6 @@ Route::group([
     Route::post('/lessons/{lesson}/addMaterial', 'LessonController@addMaterial');
     Route::put('/lessons/{lesson}/saveBoard', 'LessonController@saveBoard');
     Route::post('/lessons/{lesson}/done', 'LessonController@done');
-
-    Route::post('/video/call-user', 'VideoChatController@callUser');
-    Route::post('/video/accept-call', 'VideoChatController@acceptCall');
 });
 
 Route::group([

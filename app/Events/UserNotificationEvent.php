@@ -14,25 +14,17 @@ class UserNotificationEvent  implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user_id;
-    public $text;
-    public $id;
+    public $notification;
     public function __construct($user_id, $text)
     {
-        $notification = Notification::create([
+        $this->notification = Notification::create([
             'user_id' => $user_id,
-            'text' => $text
+            'text' => $text,
+            'read' => false
         ]);
-        $this->user_id = $user_id;
-        $this->text = $text;
-        $this->id = $notification->id;
-    }
-    public function broadcastAs()
-    {
-        return 'new';
     }
     public function broadcastOn()
     {
-        return ['user.'.$this->user_id];
+        return new PresenceChannel('App.Models.User.'.$this->notification->user_id);
     }
 }

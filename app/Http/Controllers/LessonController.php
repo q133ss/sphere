@@ -13,7 +13,7 @@ use Str;
 class LessonController extends Controller
 {
     public function show(Lesson $lesson){
-        $lesson->load(['student:id,name,surname', 'teacher:id,name,surname', 'subject', 'messages', 'lesson_boards', 'files']);
+        $lesson->load(['student:id,name,surname', 'teacher:id,name,surname', 'subject', 'lesson_boards', 'files']);
         if(auth()->user()->activeSubscribe()->count()){
             $lesson->materials = Material::where('subject_id', $lesson->subject_id)->get();
             $lesson->activeSubscribe = true;

@@ -29,9 +29,10 @@ export default {
         }
     },
     mounted(){
-        // window.channel.bind('new', notification => {
-        //     this.notifications.push(notification)
-        // })
+        Echo.join('App.Models.User.' + this.user_id)
+        .listen('UserNotificationEvent', ({notification}) => {
+            this.notifications.push(notification)
+        })
     },
     async created(){
         const {data} = await axios.get('/notifications')

@@ -22,6 +22,7 @@ class CreateLessonsTable extends Migration
             $table->bigInteger('payment_id')->unsigned()->nullable();
             $table->datetime('start');
             $table->datetime('end');
+            $table->double('price');
             $table->string('record')->nullable();
             $table->enum('status', ['future', 'progress', 'success', 'canceled'])->default('future');
             $table->timestamps();

@@ -11,7 +11,10 @@
             </tr>
             @foreach($lessons as $lesson)
             <tr>
-                <td>{{$lesson->student->surname}} {{$lesson->student->name}} {{$lesson->student->lastname}}</td>
+                <td>
+                    <img src="{{$lesson->teacher->avatar}}" alt="{{$lesson->student->full_name}}" class="avatar">
+                    {{$lesson->teacher->full_name}}
+                </td>
                 <td><span class="badge badge-primary">{{$lesson->subject->name}}</span></td>
                 <td>
                     <button-timer :user="{{auth()->user()}}" :lesson="{{$lesson}}" href="{{route('student.lessons.show', $lesson->id)}}"></button-timer>

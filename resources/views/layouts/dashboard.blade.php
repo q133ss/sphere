@@ -25,8 +25,8 @@
 					<notifications user_id="{{auth()->id()}}"></notifications>
 					<div class="dropdown" href="#">
 						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-							@if(auth()->user()->photo)
-							<span class="avatar" style="background-image: url({{auth()->user()->photo}})"></span>
+							@if(auth()->user()->avatar)
+							<span class="avatar" style="background-image: url({{auth()->user()->avatar}})"></span>
 							@endif
 							{{auth()->user()->full_name}}
 						</a>
@@ -46,7 +46,7 @@
 				<nav class="sidebar">
 					<div class="sidebar-sticky">
 						<div class="text-center my-4 sidebar__profile">
-							<img class="avatar mb-3" src="{{auth()->user()->photo}}" alt="{{auth()->user()->full_name}}">
+							<img class="avatar mb-3" src="{{auth()->user()->avatar}}" alt="{{auth()->user()->full_name}}">
 							<div class="sidebar__user-name">
 								<div>{{auth()->user()->full_name}}</div>
 								<div class="text-center">

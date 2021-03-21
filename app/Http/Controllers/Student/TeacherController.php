@@ -9,8 +9,9 @@ use App\Event;
 use App\Lesson;
 use App\Payment;
 use App\Events\UserNotificationEvent;
-use App\Events\TeacherScheduleEvent;
+use App\Events\ScheduleUpdate;
 use App\Subject;
+use Carbon\Carbon;
 class TeacherController extends Controller
 {
     public function index(Request $request){
@@ -26,13 +27,18 @@ class TeacherController extends Controller
         $teacher = User::with(['subjects'])->findOrfail($id);
         return view('student.teachers.show', compact('teacher'));
     }
-    public function getSchedule(Request $request, $id){
-        $events = Event::with(['student:id,name', 'teacher:id,name', 'subject', 'lesson:id,status'])
-            ->where('teacher_id', $id)
-            ->where('start', '>=', $request->start)
-            ->where('end', '<=', $request->end)
+    public function getSchedule(Request $request, $tid){
+        $start = Carbon::parse($request->date)->format('Y-m-d');
+        $sid = auth()->id();
+        return Event::with(['student:id,name', 'teacher:id,name', 'subject', 'lesson:id,status'])
+            ->where('teacher_id', $tid)
+            ->whereDate('start', $start)
+            ->where(function($query) use ($sid) {
+                $query->whereNull('student_id')
+                ->orWhere('student_id', $sid);
+            })
+            ->orderBy('start')
             ->get();
-        return $events;
     }
     public function my(){
         $teachers = auth()->user()->teachers;
@@ -45,7 +51,7 @@ class TeacherController extends Controller
         $event->subject_id = $request->subject_id;
         $event->save();
         $user = auth()->user();
-        $user->balance -= $teacher->lesson_price;
+        $user->decrement('balance', $teacher->lesson_price);
         $user->save();
         if(!$user->teachers->contains($id))
             $user->teachers()->attach($id, [
@@ -64,26 +70,24 @@ class TeacherController extends Controller
             'payment_id' => $payment->id,
             'event_id' => $event->id,
             'start' => $event->start,
-            'end' => $event->end
+            'end' => $event->end,
+            'price' => $teacher->lesson_price
         ]);
-        session()->flash('success', 'Вы успешно записались на урок');
         event(new UserNotificationEvent($id, 'У вас появился новый ученик'));
-        event(new TeacherScheduleEvent($id, 'update', $event));
+        event(new ScheduleUpdate($id));
+        return $user->balance;
     }
     public function unsubscribe(Request $request, $id){
         $teacher = User::findOrFail($id);
         $event = Event::findOrFail($request->id);
         $event->student_id = null;
-        $event->subject_id = null;
         $event->save();
-        $user = auth()->user();
-        $user->balance += $teacher->lesson_price;
-        $user->save();
-        // $user->teachers()->dettach($id);
         $lesson = $event->lesson;
-        $lesson->payment->delete();
-        session()->flash('success', 'Вы успешно отписались от урока');
+        $user = auth()->user();
+        $user->increment('balance', $lesson->price);
+        $lesson->delete();
         event(new UserNotificationEvent($id, 'У вас отменен урок ' . $event->start));
-        event(new TeacherScheduleEvent('update', $event));
+        event(new ScheduleUpdate($id));
+        return $user->balance;
     }
 }

@@ -7,7 +7,7 @@
     <div class="col-md-3">
         <div class="card">
             <div class="card-body">
-                <div class="photo mb-1 upload-container" style="background-image: url({{$teacher->photo}})"></div>
+                <div class="photo mb-1 upload-container" style="background-image: url({{$teacher->avatar}})"></div>
                 <h5 class="card-title text-center">{{$teacher->surname}} {{$teacher->name}}</h5>
                 <p class="text-center small">Стоиомость: {{$teacher->lesson_price}} <i class="fa fa-rub"></i></p>
                 @foreach($teacher->subjects as $subject)
@@ -18,12 +18,7 @@
         </div>
     </div>
     <div class="col-md-9">
-        <div class="card">
-            <div class="card-body">
-                <h2>Расписание</h2>
-                <student-schedule user_id="{{auth()->id()}}" balance="{{auth()->user()->balance}}" teacher_id="{{$teacher->id}}" :teacher="{{$teacher}}"></student-schedule>
-            </div>
-        </div>
+        <student-schedule user_id="{{auth()->id()}}" balance="{{auth()->user()->balance}}" teacher_id="{{$teacher->id}}" :teacher="{{$teacher}}"></student-schedule>
     </div>
 </div>
 @stop

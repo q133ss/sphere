@@ -21,7 +21,7 @@
                 <a :href="'/student_dashboard/teachers/'+teacher.id" class="card">
                     <label class="my-teacher" v-if="my.indexOf(teacher.id) > -1">Мой преродаватель</label>
                     <div class="teachers-list__photo-container">
-                    <div class="teachers-list__photo" :style="{ backgroundImage: 'url('+teacher.photo+')'}"></div>
+                    <div class="teachers-list__photo" :style="{ backgroundImage: 'url('+teacher.avatar+')'}"></div>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title text-center">{{teacher.full_name}}</h5>

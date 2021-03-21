@@ -31,7 +31,7 @@
                         </div>
                         <div class="col-md-7">
                             <div class="clearfix alert w-75" :class="{'alert-success float-left': myid == message.user.id, 'float-right alert-info': myid != message.user.id}" v-for="message in messages" :key="message.id">
-                                <img :src="message.user.photo" class="avatar float-left mr-3" :alt="message.user.full_name">
+                                <img :src="message.user.avatar" class="avatar float-left mr-3" :alt="message.user.full_name">
                                 <div>
                                     <p class="text-muted mb-0 small">{{message.created_at | moment('DD.MM.YYYY H:m')}}</p>
                                     {{message.text}}

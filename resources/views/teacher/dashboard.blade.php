@@ -39,7 +39,7 @@
                     <div class="card-header">Мои ученики</div>
                     <ul class="list-group">
                         @foreach(auth()->user()->students as $student)
-                            <li class="list-group-item"><img src="{{$student->photo}}" alt="{{$student->full_name}}" class="avatar"> {{$student->full_name}}</li>
+                            <li class="list-group-item"><img src="{{$student->avatar}}" alt="{{$student->full_name}}" class="avatar"> {{$student->full_name}}</li>
                         @endforeach
                     </ul>
                 </div>

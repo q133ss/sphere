@@ -13,7 +13,7 @@
             @foreach($lessons as $lesson)
             <tr>
                 <td>
-                    <img src="{{$lesson->student->photo}}" alt="{{$lesson->student->full_name}}" class="avatar">
+                    <img src="{{$lesson->student->avatar}}" alt="{{$lesson->student->full_name}}" class="avatar">
                     {{$lesson->student->full_name}}
                 </td>
                 <td><span class="badge badge-primary">{{$lesson->subject->name}}</span></td>
