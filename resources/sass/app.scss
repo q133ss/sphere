@@ -7,6 +7,9 @@
 @import '~bootstrap/scss/bootstrap';
 @import '~font-awesome-sass/assets/stylesheets/font-awesome';
 @import '~vue-multiselect/dist/vue-multiselect.min.css';
+@import '~vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
+@import '~sweetalert2/dist/sweetalert2.min.css';
+@import '~vue-toast-notification/dist/theme-sugar.css';
 body{
     padding-top: 65px;
     font-family: 'Poppins', sans-serif;

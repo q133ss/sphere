@@ -4,14 +4,11 @@ window.Vue = require('vue')
 window.moment = require('moment-timezone')
 require('moment/locale/ru')
 import VueToast from 'vue-toast-notification';
-import 'vue-toast-notification/dist/theme-sugar.css';
 import VueSweetalert2 from 'vue-sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
 Vue.use(VueSweetalert2);
 Vue.use(VueToast, { position: 'top' });
 import Multiselect from 'vue-multiselect'
 import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
-import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
 Vue.component('multiselect', Multiselect)
 Vue.component('profile-photo', require('./components/ProfilePhoto.vue').default)
