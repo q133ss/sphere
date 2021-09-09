@@ -50,7 +50,7 @@
                             </div>
                         </div>
                         <div class="form-grop">
-                            <VueCtkDateTimePicker v-if="event.repeat" @input="fetchEvents" v-model="event.repeatEnd" :auto-close="true" :no-button-now="true" :only-date="true" :formatted="format" :output-format="format" :format="format" label="Повторять до" locale="ru"/>
+                            <VueCtkDateTimePicker v-if="event.repeat" @input="fetchEvents" v-model="event.repeatEnd" :auto-close="true" :no-button-now="true" :only-date="true" :formatted="format" :output-format="format" :format="format" label="Повторять до" locale="ru" :min-date="minDate"/>
                         </div>
                     </form>
                 </div>
@@ -76,7 +76,7 @@ export default {
             date: moment().format('DD.MM.YYYY'),
             event: {},
             subjects: [],
-            minDate: moment().format('DD.MM.YYYY')
+            minDate: new Date()
         }
     },
     computed: {
