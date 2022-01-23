@@ -8,7 +8,9 @@
 <div class="card">
     <div class="card-header">
         <span>Материалы</span>
+        @if (false)
         <a href="{{route('admin.materials.create')}}" class=" float-right btn btn-sm btn-primary">Добавить</a>
+        @endif
     </div>
     <div class="card-body">
         @if(!$materials->count())
@@ -16,17 +18,15 @@
         @else
         <table class="table table-sm table-bordered table-hover">
             <tr>
-                <th>Предмет</th>
+                <th>Категория</th>
                 <th>Название</th>
-                <th>Действия</th>
+                <th>Превью</th>
             </tr>
             @foreach($materials as $item)
                 <tr>
-                    <td><span class="badge badge-primary">{{$item->subject ? $item->subject->name : 'Не указан'}}</span></td>
+                    <td>{!! $item->catHtml() !!}</td>
                     <td>{{$item->name}}</td>
-                    <td>
-                        <a href="{{route('admin.materials.edit', $item->id)}}" class="small">Смотреть</a>
-                    </td>
+                    <td><img src="{{$item->link()}}"></td>
                 </tr>
             @endforeach
         </table>

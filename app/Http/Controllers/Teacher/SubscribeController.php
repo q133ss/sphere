@@ -11,11 +11,11 @@ class SubscribeController extends Controller
 {
     public function index(){
         $subscribes = auth()->user()->subscribes;
-        $materials = Material::all();
+        //$materials = Material::all();
         $last = auth()->user()->subscribes()->latest('end')->first();
         $active = $subscribes->where('end', '>=', Carbon::now())->first();
         $now = Carbon::now();
-        return view('teacher.subscribe', compact('materials', 'subscribes', 'last', 'active', 'now'));
+        return view('teacher.subscribe', compact('subscribes', 'last', 'active', 'now'));
     }
     public function store(Request $request){
         $prices = [

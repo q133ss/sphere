@@ -28,7 +28,7 @@
         <span class="title">База знаний</span>
     </a></li>
     <li class="nav-item">
-        <a class="nav-link @if(Route::is('teacher.subscribe.*')) active @endif" href="{{route('teacher.subscribe.index')}}">
+        <a class="nav-link @if(Route::is('teacher.material.*')) active @endif" href="{{route('teacher.material.index')}}">
             <span class="icon"><i class="fa fa-file-pdf-o fa-lg"></i></span>
             <span class="title">Материалы</span>
         </a>

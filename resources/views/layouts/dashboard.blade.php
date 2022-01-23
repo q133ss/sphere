@@ -11,6 +11,8 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
 	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 	<script src="{{ asset('js/app.js') }}" defer></script>
+	@stack('styles')
+    @stack('scripts')
 </head>
 <body class="dashboard sidebar-active">
 	<div id="app">

@@ -1,5 +1,7 @@
 /node_modules
 /public/hot
+/resources/pdf
+/resources/text
 /public/storage
 /storage/*.key
 /public/js/app.js

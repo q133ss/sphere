@@ -139,8 +139,9 @@
 							<div class="col-lg-3 col-sm-6 col-12 footer-list">
 								<h5 class="footer-title">Информация</h5>
 								<ul>
-									<li><a href="#">Оферта</a></li>
-									<li><a href="#">Соглашение</a></li>
+                  <li><a href="/oferta_teacher" target="_blank" title="">Оферта для преподователей</a></li>
+                  <li><a href="/oferta_student" target="_blank" title="">Оферта для учеников</a></li>
+									<li><a href="{{route('consent')}}">Соглашение</a></li>
 									<li><a href="{{route('pravila')}}">Сотрудничество</a></li>
 									<li><a href="#">Пресс-центр</a></li>
 								</ul>

@@ -13,6 +13,8 @@ Route::get('/faq', 'HomeController@faq')->name('faq');
 Route::view('/consent', 'site.consent')->name('consent');
 Route::view('/pravila', 'site.pravila')->name('pravila');
 Route::view('/oferta', 'site.oferta')->name('oferta');
+Route::view('/oferta_teacher', 'site.oferta_teacher')->name('oferta.teacher');
+Route::view('/oferta_student', 'site.oferta_student')->name('oferta.student');
 Route::get('/about', 'HomeController@about')->name('about');
 Route::get('/posts', 'HomeController@posts')->name('posts.index');
 Route::get('/posts/{post}', 'HomeController@post')->name('posts.show');
@@ -105,4 +107,8 @@ Route::group([
     Route::get('/subscribe', 'SubscribeController@index')->name('subscribe.index');
     Route::apiResource('/schedule', 'ScheduleController');
     Route::resource('/lessons', 'LessonController')->only(['index', 'show']);
+    Route::get('/materials', 'MaterialController@index')->name('material.index');
+    Route::get('/material/file', 'MaterialController@file')->name('material.file');
+    Route::get('/material/book/{id}', 'MaterialController@show')->name('material.show');
+    //Route::get('/materials/install', 'MaterialController@install')->name('material.install');
 });
