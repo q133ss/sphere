@@ -1,6 +1,34 @@
 @extends('layouts.dashboard')
 @section('title', 'Список занятий')
+@push('scripts')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <script>
+        function lessonFilter(filter){
+            //Фильтр по статусу
+            $.ajax({
+                url: '{{route('student.lessons.filter')}}',
+                type: "POST",
+                data: {
+                    filter:filter
+                },
+                headers:{
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: (data) => {
+                     $('.s-list__block').html(data)
+                },
+                error: function(request, status, error) {
+                    // var statusCode = request.responseText;
+                    // console.log(statusCode);
+                }
+            })
+
+        }
+    </script>
+@endpush
 @section('content')
+    <div id="f">21321321321</div>
     <section class="s-list">
         <div class="wrappers">
             <div class="s-list__title">
@@ -22,19 +50,12 @@
                     </select>
                 </div>
                 <div class="s-list__title-filter">
-                    <select class="js-select" name="sort" style="display: none">
+                    <select class="js-select" onchange="lessonFilter($(this).val())" name="sort" style="display: none">
                         <option>Статус урока</option>
-                        <option value="default" selected="">Новые</option>
-                        <option value="price_desc">Цена уменьшение</option>
-                        <option value="price_asc">Цена увеличение</option>
-                        <option value="comment">Комментируемые</option>
-                        <option value="rating">Популярные</option>
-                        <option value="shows">Просматриваемые</option>
-                        <option value="price_desc">Цена уменьшение</option>
-                        <option value="price_asc">Цена увеличение</option>
-                        <option value="comment">Комментируемые</option>
-                        <option value="rating">Популярные</option>
-                        <option value="shows">Просматриваемые</option>
+                        <option value="future" selected="">Состоится</option>
+                        <option value="completed">Завершен</option>
+                        <option value="process">В процессе</option>
+                        <option value="cancel">Отменен</option>
                     </select>
                 </div>
             </div>
