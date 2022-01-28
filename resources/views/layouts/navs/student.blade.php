@@ -1,22 +1,24 @@
-<ul class="nav flex-column">
-    <li class="nav-item"><a class="nav-link @if(Route::is('student.index')) active @endif" href="{{route('student.index')}}">
-        <span class="icon"><i class="fa fa-home fa-lg"></i></span>
-        <span class="title">Главная</span>
-    </a></li>
-    <li class="nav-item"><a class="nav-link @if(Route::is('student.teachers.show') || Route::is('student.teachers.index')) active @endif" href="{{route('student.teachers.index')}}">
-        <span class="icon"><i class="fa fa-users fa-lg"></i></span>
-        <span class="title">Поиск репетитора</span>
-    </a></li>
-    <li class="nav-item"><a class="nav-link @if(Route::is('student.teachers.my')) active @endif" href="{{route('student.teachers.my')}}">
-        <span class="icon"><i class="fa fa-users fa-lg"></i></span>
-        <span class="title">Мои репетиторы</span>
-    </a></li>
-    <li class="nav-item"><a class="nav-link @if(Route::is('student.lessons.*')) active @endif" href="{{route('student.lessons.index')}}">
-        <span class="icon"><i class="fa fa-leanpub fa-lg"></i></span>
-        <span class="title">Занятия</span>
-    </a></li>
-    <li class="nav-item"><a class="nav-link @if(Route::is('student.payments.*')) active @endif" href="{{route('student.payments.index')}}">
-        <span class="icon"><i class="fa fa-rub fa-lg"></i></span>
-        <span class="title">Платежи</span>
-    </a></li>
-</ul>
+<div class="menu">
+    <div class="menu__logo"> <a href="/"><img src="/v2/svg/menu/logos.svg" alt="logo"></a></div>
+    <div class="menu__list"> <a class="menu__list-items @if(Route::is('student.index')) menu__list-items-active @endif" href="{{route('student.index')}}" id="menuList-1">
+            <div class="menu__list-items-add"></div>
+            <svg class="menu-icons">
+                <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-1"></use>
+            </svg></a><a class="menu__list-items @if(Route::is('student.schedule.index')) menu__list-items-active @endif" href="{{route('student.schedule.index')}}" id="menuList-2">
+            <div class="menu__list-items-add"></div>
+            <svg class="menu-icons">
+                <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-2"></use>
+            </svg></a><a class="menu__list-items @if(Route::is('student.lessons.index')) menu__list-items-active @endif" href="{{route('student.lessons.index')}}" id="menuList-3">
+            <div class="menu__list-items-add"></div>
+            <svg class="menu-icons">
+                <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-3"></use>
+            </svg></a><a class="menu__list-items" href="t-profile.html" id="menuList-4">
+            <div class="menu__list-items-add"></div>
+            <svg class="menu-icons">
+                <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-4"></use>
+            </svg></a><a class="menu__list-items" href="t-profile.html" id="menuList-5">
+            <div class="menu__list-items-add"></div>
+            <svg class="menu-icons">
+                <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-5"></use>
+            </svg></a></div>
+</div>

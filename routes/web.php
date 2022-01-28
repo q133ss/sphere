@@ -34,7 +34,7 @@ Route::group([
     Route::get('/student_dashboard/payments', 'PaymentController@index')->name('student.payments.index');
     Route::get('/teacher_dashboard/payments', 'PaymentController@index')->name('teacher.payments.index');
     Route::post('/payments', 'PaymentController@store')->name('payments.store');
-    
+
     Route::view('/student_dashboard/tickets', 'tickets.index')->name('student.tickets.index');
     Route::view('/teacher_dashboard/tickets', 'tickets.index')->name('teacher.tickets.index');
     Route::view('/admin_dashboard/tickets', 'tickets.index')->name('admin.tickets.index');
@@ -42,7 +42,7 @@ Route::group([
     Route::get('/tickets/{ticket}/getMessages', 'TicketController@getMessages');
     Route::post('/tickets/{ticket}/close', 'TicketController@close');
     Route::apiResource('/tickets', 'TicketController')->only(['index', 'store']);
-    
+
     Route::get('/subjects', 'UserController@getSubjects');
     Route::post('/notifications/read', 'NotificationController@read');
     Route::get('/notifications', 'NotificationController@index');
@@ -84,6 +84,7 @@ Route::group([
 ], function(){
     Route::get('/', 'DashboardController@index')->name('index');
     Route::get('/profile', 'UserController@showProfile')->name('profile');
+    Route::get('/schedule', 'ScheduleController@index')->name('schedule.index');
     Route::get('/teachers/my', 'TeacherController@my')->name('teachers.my');
     Route::get('/teachers', 'TeacherController@index')->name('teachers.index');
     Route::get('/teachers/{id}/getSchedule', 'TeacherController@getSchedule');

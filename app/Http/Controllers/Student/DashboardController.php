@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index(){
-        return view('student.dashboard');
+        $lessons = auth()->user()->student_lessons()->with(['teacher', 'subject'])->get();
+        return view('student.dashboard', compact('lessons'));
     }
 }
