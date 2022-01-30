@@ -94,6 +94,7 @@ Route::group([
     Route::resource('/lessons', 'LessonController')->only(['index', 'show']);
     Route::get('/pay', 'PayController@index')->name('pay.index');
     Route::get('/edit', 'EditController@index')->name('edit.index');
+    Route::post('/edit/update', 'EditController@update')->name('edit.update');
     //Ajax filter
     Route::post('/lessons', 'LessonFilterController@filter')->name('lessons.filter');
 });
