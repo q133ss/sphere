@@ -1,14 +1,14 @@
 "use strict";
 
-var countElementListMenu = $('.menu__list-items').length;
+var countElementListMenu = $(".menu__list-items").length;
 
 var _loop = function _loop(i) {
-  $("#menuList-".concat(i)).on('click', function () {
+  $("#menuList-".concat(i)).on("click", function () {
     for (var j = 1; j <= countElementListMenu; j++) {
-      $("#menuList-".concat(j)).removeClass('menu__list-items-active');
+      $("#menuList-".concat(j)).removeClass("menu__list-items-active");
     }
 
-    $("#menuList-".concat(i)).addClass('menu__list-items-active');
+    $("#menuList-".concat(i)).addClass("menu__list-items-active");
   });
 };
 
@@ -16,9 +16,30 @@ for (var i = 1; i <= countElementListMenu; i++) {
   _loop(i);
 }
 
-$('.t-header__nav-client-profile').on('click', function () {
-  $('.t-header__nav-client-list').toggleClass('display-n');
-  $('.t-header__nav-client-arrow').toggleClass('rotate-180');
+$(".t-header__nav-client-profile").on("click", function () {
+  $(".t-header__nav-client-list").toggleClass("display-n");
+  $(".t-header__nav-client-arrow").toggleClass("rotate-180");
+});
+$(function () {
+  if ($(".t-profile__info-student-items").length == 0) {
+    $(".t-profile__info-student-nav").addClass("display-n");
+    $(".t-profile__info-student-list").addClass("display-n");
+    $(".t-profile__info-student-banner").removeClass("display-n");
+  } else {
+    $(".t-profile__info-student-nav").removeClass("display-n");
+    $(".t-profile__info-student-list").removeClass("display-n");
+    $(".t-profile__info-student-banner").addClass("display-n");
+  }
+
+  if ($(".t-profile__info-lessons-items").length == 0) {
+    $(".t-profile__info-lessons-nav").addClass("display-n");
+    $(".t-profile__info-lessons-list").addClass("display-n");
+    $(".t-profile__info-lessons-banner").removeClass("display-n");
+  } else {
+    $(".t-profile__info-lessons-nav").removeClass("display-n");
+    $(".t-profile__info-lessons-list").removeClass("display-n");
+    $(".t-profile__info-lessons-banner").addClass("display-n");
+  }
 });
 ;
 var eventDatesTeacher = {};
@@ -33,6 +54,7 @@ $(function () {
   var quizOrderDataCalendarInput = $("#datepickerScheduleTeacher").val();
   $(".t-schedule__info-list-title").text(quizOrderDataCalendarInput);
 });
+console.log($.datepicker);
 $.datepicker.regional.ru = {
   closeText: "Закрыть",
   prevText: "Предыдущий",
@@ -65,6 +87,7 @@ $("#datepickerScheduleTeacher").datepicker().on("change", function () {
   $(".model-calendar").addClass("display-n");
   var quizOrderDataCalendarInput = $("#datepickerScheduleTeacher").val();
   $(".t-schedule__info-list-title").text(quizOrderDataCalendarInput);
+  $("#modaldatepickerScheduleTeacher").val(quizOrderDataCalendarInput);
 });
 
 for (var _i2 = 1; _i2 <= $(".t-schedule__info-items").length; _i2++) {
@@ -82,6 +105,27 @@ $(".t-schedule__info-calendar-btn").on("click", function () {
 $(".modelScheduleTeacher__wrappers-close").on("click", function () {
   $("body").css("overflow", "visible");
   $(".modelScheduleTeacher").addClass("display-n");
+});
+$(function () {
+  $("#modaldatepickerScheduleTeacher").datepicker();
+  $("#modalsdatepickerScheduleTeacher").datepicker();
+});
+$(function () {
+  var selected = $(".modelScheduleTeacher__time-items").map(function () {
+    if ($(this).html()) return $(this).html();
+  }).get();
+  $.each(selected, function (index, value) {
+    var newElementBlock = document.createElement("option");
+    newElementBlock.setAttribute("value", "".concat(value));
+    newElementBlock.innerHTML = "".concat(value);
+    var classNameTime = document.getElementsByClassName("modaltime")[0];
+    classNameTime.appendChild(newElementBlock);
+  });
+});
+var quizOrderDataCalendarInput = $("#datepickerScheduleTeacher").val();
+$("#modaldatepickerScheduleTeacher").val(quizOrderDataCalendarInput);
+$("#againDate").on("click", function () {
+  $(".modelScheduleTeacher__wrappers-calendars").toggleClass("display-n");
 });
 ;
 
@@ -212,6 +256,29 @@ $(function () {
 });
 ;
 $(".t-lesson__contact-timeline-progress").css("width", "".concat($(".t-lesson__contact-timeline-progress span").text(), "%"));
+;
+$(".t-edit__info-plus").on("click", function () {
+  var a = 1;
+  var elementsS = $(".t-edit__info-student input").attr("placeholder");
+  var inviteSectionS = document.getElementsByClassName("t-edit__info-student")[0];
+  var newElementS = document.createElement("div");
+  newElementS.classList.add("t-edit__info-students");
+  newElementS.innerHTML = "<input type=\"text\" placeholder=\"".concat(elementsS, "\" id='edit__student_").concat(a, "' />");
+  inviteSectionS.appendChild(newElementS);
+  var elementsT = $(".t-edit__info-time input").attr("placeholder");
+  var inviteSectionT = document.getElementsByClassName("t-edit__info-time")[0];
+  var newElementT = document.createElement("div");
+  newElementT.classList.add("t-edit__info-times");
+  newElementT.innerHTML = "<input type=\"text\" placeholder=\"".concat(elementsT, "\" id='edit__time_").concat(a, "' />");
+  inviteSectionT.appendChild(newElementT);
+  var elementsP = $(".t-edit__info-price input").attr("placeholder");
+  var inviteSectionP = document.getElementsByClassName("t-edit__info-price")[0];
+  var newElementP = document.createElement("div");
+  newElementP.classList.add("t-edit__info-prices");
+  newElementP.innerHTML = "<input type=\"text\" placeholder=\"".concat(elementsP, "\" id='edit__price_").concat(a, "' />");
+  inviteSectionP.appendChild(newElementP);
+  a++;
+});
 ;
 $('.s-header__nav-client-profile').on('click', function () {
   $('.s-header__nav-client-list').toggleClass('display-n');

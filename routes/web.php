@@ -92,6 +92,7 @@ Route::group([
     Route::post('/teachers/{id}/subscribe', 'TeacherController@subscribe');
     Route::post('/teachers/{id}/unsubscribe', 'TeacherController@unsubscribe');
     Route::resource('/lessons', 'LessonController')->only(['index', 'show']);
+    Route::get('/pay', 'PayController@index')->name('pay.index');
     //Ajax filter
     Route::post('/lessons', 'LessonFilterController@filter')->name('lessons.filter');
 });

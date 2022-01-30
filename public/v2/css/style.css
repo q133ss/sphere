@@ -183,6 +183,12 @@ body {
 	background : #f6f7fb;
 }
 
+textarea:focus
+,
+input:focus {
+	outline : none;
+}
+
 a {
 	text-decoration : none;
 }
@@ -1245,6 +1251,20 @@ input:focus {
 	width : 106px;
 	height : 100px;
 	overflow : hidden;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : center;
+	-ms-flex-pack : center;
+	justify-content : center;
+}
+
+.t-profile__banner-icons img {
+	-o-object-fit : cover;
+	   object-fit : cover;
 }
 
 .t-profile__info {
@@ -1399,6 +1419,25 @@ input:focus {
 	font-size : 10px;
 	line-height : 12px;
 	color : #435179;
+}
+
+.t-profile__info-student-banner {
+	width : 100%;
+	padding : 35px 0;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : center;
+	-ms-flex-pack : center;
+	justify-content : center;
+}
+
+.t-profile__info-student-banner img {
+	-o-object-fit : cover;
+	   object-fit : cover;
 }
 
 .t-profile__info-lessons {
@@ -1602,6 +1641,25 @@ input:focus {
 	width : 6px;
 	height : 6px;
 	border-radius : 50%;
+}
+
+.t-profile__info-lessons-banner {
+	width : 100%;
+	padding : 35px 0;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : center;
+	-ms-flex-pack : center;
+	justify-content : center;
+}
+
+.t-profile__info-lessons-banner img {
+	-o-object-fit : cover;
+	   object-fit : cover;
 }
 
 .t-active-date a {
@@ -2150,7 +2208,7 @@ input:focus {
 }
 
 .modelScheduleTeacher__wrappers {
-	width : 500px;
+	width : 600px;
 	padding : 20px;
 	position : absolute;
 	top : 50%;
@@ -2160,6 +2218,23 @@ input:focus {
 	        transform : translate(-50%, -50%);
 	background : #ffffff;
 	border-radius : 15px;
+}
+
+.modelScheduleTeacher__wrappers-btn {
+	background : #625dee;
+	border-radius : 22px;
+	padding : 12px 50px;
+	font-style : normal;
+	font-weight : 500;
+	font-size : 18px;
+	line-height : 17px;
+	text-align : center;
+	color : #ffffff;
+	cursor : pointer;
+	position : absolute;
+	bottom : 12px;
+	right : 15px;
+	min-height : 51px;
 }
 
 .modelScheduleTeacher__wrappers-close {
@@ -2175,6 +2250,123 @@ input:focus {
 	-webkit-transition : all 0.5s ease;
 	     -o-transition : all 0.5s ease;
 	        transition : all 0.5s ease;
+}
+
+.modelScheduleTeacher__wrappers-title {
+	font-style : normal;
+	font-weight : bold;
+	font-size : 24px;
+	line-height : 29px;
+	color : #435179;
+	padding : 15px 0 30px 0;
+}
+
+.modelScheduleTeacher__wrappers-block {
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : justify;
+	-ms-flex-pack : justify;
+	justify-content : space-between;
+}
+
+.modelScheduleTeacher__wrappers-date {
+	padding : 7px 20px;
+	border : 2px solid #635ff2;
+	border-radius : 30.5px;
+	background : #ffffff;
+	width : 250px;
+}
+
+.modelScheduleTeacher__wrappers-date input {
+	width : 205px;
+	padding : 5px 0;
+}
+
+.modelScheduleTeacher__wrappers-line {
+	border-top : 2px solid #635ff2;
+	width : 100%;
+	height : 1px;
+	margin : 35px 0;
+}
+
+.modelScheduleTeacher__wrappers-calendars {
+	padding : 7px 20px;
+	border : 2px solid #635ff2;
+	border-radius : 30.5px;
+	background : #ffffff;
+	margin : 35px 0 -8px 0;
+	width : 250px;
+}
+
+.modelScheduleTeacher__wrappers-calendars input {
+	width : 205px;
+	padding : 5px 0;
+}
+
+.modelScheduleTeacher__wrappers-again {
+	position : relative;
+	width : 250px;
+}
+
+.modelScheduleTeacher__wrappers-again__input {
+	-webkit-appearance : none;
+	   -moz-appearance : none;
+	        appearance : none;
+	position : absolute;
+}
+
+.modelScheduleTeacher__wrappers-again__label {
+	padding-left : 25px;
+	font-size : 1rem;
+	color : #444444;
+	cursor : pointer;
+}
+
+.modelScheduleTeacher__wrappers-again__label:before {
+	content : "";
+	display : block;
+	width : 16px;
+	height : 16px;
+	border : 1px solid #625dee;
+	background-color : #ffffff;
+	border-radius : 3px;
+	position : absolute;
+	top : 4px;
+	left : 0;
+	z-index : 1;
+	-webkit-transition : background 0.1s linear, border 0.1s linear;
+	     -o-transition : background 0.1s linear, border 0.1s linear;
+	        transition : background 0.1s linear, border 0.1s linear;
+}
+
+.modelScheduleTeacher__wrappers-again__label:after {
+	content : "";
+	display : block;
+	width : 12px;
+	height : 12px;
+	background : url("../svg/t-schedule/check.svg") no-repeat;
+	background-size : 12px 12px;
+	opacity : 0;
+	position : absolute;
+	top : 6px;
+	left : 2px;
+	z-index : 2;
+	-webkit-transition : opacity 0.1s linear;
+	     -o-transition : opacity 0.1s linear;
+	        transition : opacity 0.1s linear;
+}
+
+.modelScheduleTeacher__wrappers-again__input:checked + .modelScheduleTeacher__wrappers-again__label:before {
+	background-color : #625dee;
+	border-color : #625dee;
+}
+
+.modelScheduleTeacher__wrappers-again__input:checked + .modelScheduleTeacher__wrappers-again__label:after {
+	opacity : 1;
 }
 
 .t-student__info {
@@ -4753,6 +4945,844 @@ input:focus {
 	width : 15px;
 	background : transparent;
 	cursor : pointer;
+}
+
+.t-edit {
+	padding : 35px 0 30px 115px;
+	font-family : Inter;
+}
+
+.t-edit .wrappers {
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__title {
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__title h3 {
+	font-style : normal;
+	font-weight : bold;
+	font-size : 24px;
+	line-height : 29px;
+	color : #435179;
+}
+
+.t-edit__title-v {
+	margin : 0 0 0 17px;
+	background : #5ec3ac;
+	border-radius : 14px;
+	text-align : center;
+	padding : 6px 37px;
+	font-style : normal;
+	font-weight : 600;
+	font-size : 14px;
+	color : #ffffff;
+}
+
+.t-edit__wrapper {
+	margin : 35px 0 0 0;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : justify;
+	-ms-flex-pack : justify;
+	justify-content : space-between;
+	width : 100%;
+}
+
+.t-edit__photo {
+	width : 207px;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__photo-img {
+	width : 100%;
+	height : 207px;
+	background : #625dee;
+	border-radius : 50%;
+}
+
+.t-edit__info {
+	width : 876px;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	margin : 35px 90px 0 0;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__info-contact {
+	display : -ms-grid;
+	display :     grid;
+	grid-template-columns : repeat(auto-fill, minmax(270px, 1fr));
+	gap : 70px 30px;
+	width : 100%;
+}
+
+.t-edit__info-surname {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__info-surname label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-surname input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-name {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__info-name label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-name input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-patronymic {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__info-patronymic label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-patronymic input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-year {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__info-year label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-year input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-email {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__info-email label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-email input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-phone {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__info-phone label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-phone input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-password {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+	height : -webkit-max-content;
+	height :    -moz-max-content;
+	height :         max-content;
+}
+
+.t-edit__info-password label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-password input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-passwords {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+	height : -webkit-max-content;
+	height :    -moz-max-content;
+	height :         max-content;
+}
+
+.t-edit__info-passwords input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-add {
+	margin : 75px 0 0 0;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+	width : 100%;
+}
+
+.t-edit__info-about {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 100%;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	margin : 55px 0 0 0;
+}
+
+.t-edit__info-about label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-about textarea {
+	resize : none;
+	border : none;
+	width : 100%;
+	min-height : 100px;
+}
+
+.t-edit__info-education {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 100%;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	margin : 70px 0 0 0;
+}
+
+.t-edit__info-education label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-education textarea {
+	resize : none;
+	border : none;
+	width : 100%;
+	min-height : 100px;
+}
+
+.t-edit__info-files {
+	margin : 20px 0 0 0;
+}
+
+.t-edit__info-files label {
+	font-style : normal;
+	font-weight : 500;
+	font-size : 16px;
+	line-height : 19px;
+	-webkit-text-decoration-line : underline;
+	        text-decoration-line : underline;
+	color : #000000;
+	cursor : pointer;
+}
+
+.t-edit__info-process {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 100%;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	margin : 70px 0 0 0;
+}
+
+.t-edit__info-process label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-process textarea {
+	resize : none;
+	border : none;
+	width : 100%;
+	min-height : 100px;
+}
+
+.t-edit__info-experience {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 100%;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	margin : 70px 0 0 0;
+}
+
+.t-edit__info-experience label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-experience textarea {
+	resize : none;
+	border : none;
+	width : 100%;
+	min-height : 100px;
+}
+
+.t-edit__info-lessons {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 100%;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+}
+
+.t-edit__info-lessons label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-lessons textarea {
+	resize : none;
+	border : none;
+	width : 100%;
+	min-height : 100px;
+}
+
+.t-edit__info-btn {
+	background : #625dee;
+	border-radius : 22px;
+	padding : 13px 80px;
+	margin : 50px 0 0 0;
+	font-style : normal;
+	font-weight : 500;
+	font-size : 18px;
+	line-height : 17px;
+	text-align : center;
+	color : #ffffff;
+}
+
+.t-edit__info-list {
+	margin : 75px 0 0 0;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : justify;
+	-ms-flex-pack : justify;
+	justify-content : space-between;
+	width : 100%;
+}
+
+.t-edit__info-student {
+	width : 267px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__info-student label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-student input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-time {
+	width : 267px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__info-time label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-time input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-price {
+	width : 267px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.t-edit__info-price label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-price input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.t-edit__info-plus {
+	margin : 18px 0 0 0;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+	cursor : pointer;
+}
+
+.t-edit__info-plus p {
+	margin : 0 0 0 11px;
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	line-height : 17px;
+	color : #435179;
+}
+
+.t-edit__info-students {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+	margin : 0 0 30px 0;
+}
+
+.t-edit__info-students label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-students input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+	margin : 0 0 30px 0;
+}
+
+.t-edit__info-students input:last-child {
+	margin : 0;
+}
+
+.t-edit__info-times {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+	margin : 0 0 30px 0;
+}
+
+.t-edit__info-times label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-times input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+	margin : 0 0 30px 0;
+}
+
+.t-edit__info-times input:last-child {
+	margin : 0;
+}
+
+.t-edit__info-prices {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+	margin : 0 0 30px 0;
+}
+
+.t-edit__info-prices label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.t-edit__info-prices input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+	margin : 0 0 30px 0;
+}
+
+.t-edit__info-prices input:last-child {
+	margin : 0;
+}
+
+#edit_file {
+	opacity : 0;
+	position : absolute;
+	z-index : -1;
+}
+
+.m-error {
+	border : 1px solid red;
+	-webkit-transition : all 0.5s ease;
+	     -o-transition : all 0.5s ease;
+	        transition : all 0.5s ease;
 }
 
 .s-profile__banners {
@@ -9084,4 +10114,439 @@ second, second and am/pm */
 	font-size : 16px;
 	line-height : 20px;
 	color : #000000;
+}
+
+.s-edit {
+	padding : 35px 0 30px 115px;
+	font-family : Inter;
+}
+
+.s-edit .wrappers {
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.s-edit__title {
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.s-edit__title h3 {
+	font-style : normal;
+	font-weight : bold;
+	font-size : 24px;
+	line-height : 29px;
+	color : #435179;
+}
+
+.s-edit__title-v {
+	margin : 0 0 0 17px;
+	background : #5ec3ac;
+	border-radius : 14px;
+	text-align : center;
+	padding : 6px 37px;
+	font-style : normal;
+	font-weight : 600;
+	font-size : 14px;
+	color : #ffffff;
+}
+
+.s-edit__wrapper {
+	margin : 35px 0 0 0;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : justify;
+	-ms-flex-pack : justify;
+	justify-content : space-between;
+	width : 100%;
+}
+
+.s-edit__photo {
+	width : 207px;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.s-edit__photo-img {
+	width : 100%;
+	height : 207px;
+	background : #625dee;
+	border-radius : 50%;
+}
+
+.s-edit__info {
+	width : 876px;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	margin : 35px 90px 0 0;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.s-edit__info-contact {
+	display : -ms-grid;
+	display :     grid;
+	grid-template-columns : repeat(auto-fill, minmax(270px, 1fr));
+	gap : 70px 30px;
+	width : 100%;
+}
+
+.s-edit__info-surname {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.s-edit__info-surname label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.s-edit__info-surname input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.s-edit__info-name {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.s-edit__info-name label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.s-edit__info-name input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.s-edit__info-patronymic {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.s-edit__info-patronymic label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.s-edit__info-patronymic input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.s-edit__info-year {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.s-edit__info-year label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.s-edit__info-year input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.s-edit__info-email {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.s-edit__info-email label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.s-edit__info-email input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.s-edit__info-phone {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+}
+
+.s-edit__info-phone label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.s-edit__info-phone input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.s-edit__info-password {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+	height : -webkit-max-content;
+	height :    -moz-max-content;
+	height :         max-content;
+}
+
+.s-edit__info-password label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.s-edit__info-password input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.s-edit__info-passwords {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 267px;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-align : center;
+	-ms-flex-align : center;
+	align-items : center;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+	height : -webkit-max-content;
+	height :    -moz-max-content;
+	height :         max-content;
+}
+
+.s-edit__info-passwords input {
+	font-style : normal;
+	font-weight : normal;
+	font-size : 14px;
+	color : #435179;
+}
+
+.s-edit__info-add {
+	margin : 10px 0 0 0;
+	display : -webkit-box;
+	display : -ms-flexbox;
+	display : flex;
+	-webkit-box-orient : vertical;
+	-webkit-box-direction : normal;
+	-ms-flex-direction : column;
+	    flex-direction : column;
+	-webkit-box-align : start;
+	-ms-flex-align : start;
+	align-items : flex-start;
+	-webkit-box-pack : start;
+	-ms-flex-pack : start;
+	justify-content : flex-start;
+	width : 100%;
+}
+
+.s-edit__info-about {
+	background : #ffffff;
+	border-radius : 20px;
+	width : 100%;
+	padding : 10px 10px 10px 22px;
+	position : relative;
+	margin : 55px 0 0 0;
+}
+
+.s-edit__info-about label {
+	position : absolute;
+	left : 0;
+	top : -30px;
+	font-style : normal;
+	font-weight : bold;
+	font-size : 16px;
+	line-height : 19px;
+	color : #435179;
+}
+
+.s-edit__info-about textarea {
+	resize : none;
+	border : none;
+	width : 100%;
+	min-height : 100px;
+}
+
+.s-edit__info-btn {
+	background : #625dee;
+	border-radius : 22px;
+	padding : 13px 80px;
+	margin : 50px 0 0 0;
+	font-style : normal;
+	font-weight : 500;
+	font-size : 18px;
+	line-height : 17px;
+	text-align : center;
+	color : #ffffff;
 }
