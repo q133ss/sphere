@@ -2,14 +2,14 @@
 @section('title', 'Профиль')
 @section('content')
     <section class="s-edit">
+        <form action="{{route('student.edit.update')}}" method="POST">
+            @csrf
         <div class="wrappers">
             <div class="s-edit__title">
                 <h3>Мой профиль</h3>
-                <div class="s-edit__title-v" @if(Auth()->user()->confirm == 0) style="background: #c5cee0" @endif>@if(Auth()->user()->confirm == 1) Подтвержден @else Не подтвержден @endif</div>
+                <div class="s-edit__title-v" @if(Auth()->user()->confirmed == 0) style="background: #c5cee0" @endif>@if(Auth()->user()->confirmed == 1) Подтвержден @else Не подтвержден @endif</div>
             </div>
             <div class="s-edit__wrapper">
-                <form action="{{route('student.edit.update')}}" method="POST">
-                    @csrf
                 <div class="s-edit__photo">
                     <div class="s-edit__photo-img" style="background-image: url('{{Auth()->user()->photo}}');background-size: cover"> </div>
                 </div>
@@ -55,8 +55,8 @@
                         <button class="s-edit__info-btn">Сохранить</button>
                     </div>
                 </div>
-                </form>
             </div>
         </div>
+        </form>
     </section>
 @endsection

@@ -7,7 +7,7 @@
                 <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-1"></use>
             </svg>
         </a>
-        <a class="menu__list-items @if(Route::is('student.schedule.index')) menu__list-items-active @endif" href="{{route('student.schedule.index')}}" id="menuList-2">
+        <a class="menu__list-items @if(Route::is('student.find.index')) menu__list-items-active @endif" href="{{route('student.find.index')}}" id="menuList-2">
             <div class="menu__list-items-add"></div>
             <svg class="menu-icons">
                 <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-2"></use>

@@ -84,6 +84,7 @@ Route::group([
 ], function(){
     Route::get('/', 'DashboardController@index')->name('index');
     Route::get('/profile', 'UserController@showProfile')->name('profile');
+    Route::get('/find', 'FindController@index')->name('find.index');
     Route::get('/schedule', 'ScheduleController@index')->name('schedule.index');
     Route::get('/teachers/my', 'TeacherController@my')->name('teachers.my');
     Route::get('/teachers', 'TeacherController@index')->name('teachers.index');
@@ -118,3 +119,8 @@ Route::group([
     Route::get('/material/book/{id}', 'MaterialController@show')->name('material.show');
     //Route::get('/materials/install', 'MaterialController@install')->name('material.install');
 });
+
+
+Route::post('/asd', function (){
+    dd($_POST);
+})->name('check');
