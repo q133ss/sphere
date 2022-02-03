@@ -19,4 +19,11 @@ class UserController extends Controller
         $students = auth()->user()->students()->paginate(25);
         return view('teacher.students', compact('students'));
     }
+
+    public function search(Request $request){
+        if($request->ajax()){
+            $students = auth()->user()->students()->where('name','LIKE', "%$request->search%")->get();
+            return view('ajax.teacher.students', compact('students'))->render();
+        }
+    }
 }

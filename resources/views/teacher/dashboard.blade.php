@@ -1,65 +1,187 @@
 @extends('layouts.dashboard')
 @section('content')
-<div class="card">
-    <div class="card-header">С возвращением {{auth()->user()->full_name}}</div>
-    <div class="card-body">
-        <div class="row no-gutters">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body d-flex justify-content-between align-items-center">
-                        <span class="dashboard__card__icon success"><i class="fa fa-home fa-lg"></i></span>
-                        <span class="dashboard__card__name">Сегодня занятий</span>
-                        <span class="dashboard__card__value">{{\App\Lesson::where('teacher_id', auth()->id())->whereDate('start', \Carbon\Carbon::now())->count()}}</span>
-                    </div>
+    <section class="t-profile__banners">
+        <div class="wrappers">
+            <div class="t-profile__banners-items">
+                <div class="t-profile__banners-text">
+                    <h3>{{\App\Lesson::where('teacher_id', auth()->id())->whereDate('start', \Carbon\Carbon::now())->count()}}</h3>
+                    <p>Сегодня занятий</p>
                 </div>
+                <div class="t-profile__banners-icons"> <picture><source srcset="/v2/img/t-profile/profile-icons-1.webp"type="image/webp"><img src="/v2/img/t-profile/profile-icons-1.png" alt="img"></picture></div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body d-flex justify-content-between align-items-center">
-                        <span class="dashboard__card__icon warning"><i class="fa fa-home fa-lg"></i></span>
-                        <span class="dashboard__card__name">У меня учеников</span>
-                        <span class="dashboard__card__value">{{auth()->user()->students()->count()}}</span>
-                    </div>
+            <div class="t-profile__banners-items">
+                <div class="t-profile__banners-text">
+                    <h3>{{auth()->user()->students()->count()}}</h3>
+                    <p>Моих учеников</p>
                 </div>
+                <div class="t-profile__banners-icons"> <picture><source srcset="/v2/img/t-profile/profile-icons-2.webp"type="image/webp"><img src="/v2/img/t-profile/profile-icons-2.png" alt="img"></picture></div>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body d-flex justify-content-between align-items-center">
-                        <span class="dashboard__card__icon info"><i class="fa fa-home fa-lg"></i></span>
-                        <span class="dashboard__card__name">Проведено занятий</span>
-                        <span class="dashboard__card__value">{{\App\Lesson::where('teacher_id', auth()->id())->where('status', 'success')->count()}}</span>
-                    </div>
+            <div class="t-profile__banners-items">
+                <div class="t-profile__banners-text">
+                    <h3>{{\App\Lesson::where('teacher_id', auth()->id())->where('status', 'success')->count()}}</h3>
+                    <p>Проведено занятий</p>
+                </div>
+                <div class="t-profile__banners-icons"> <picture><source srcset="/v2/img/t-profile/profile-icons-3.webp"type="image/webp"><img src="/v2/img/t-profile/profile-icons-3.png" alt="img"></picture></div>
+            </div>
+        </div>
+    </section>
+    <section class="t-profile__banner">
+        <div class="wrappers">
+            <div class="t-profile__banner-items">
+                <div class="t-profile__banner-text">
+                    <h3>110 790₽ </h3>
+                    <p>Заработано</p>
+                </div>
+                <div class="t-profile__banner-icons"> <picture><source srcset="/v2/img/t-profile/profile-icons-4.webp"type="image/webp"><img src="/v2/img/t-profile/profile-icons-4.png" alt="img"></picture></div>
+            </div>
+            <div class="t-profile__banner-items">
+                <div class="t-profile__banner-text">
+                    <h3>10 790₽ </h3>
+                    <p>Планируемый заработок</p>
+                </div><picture><source srcset="/v2/img/t-profile/profile-icons-5.webp"type="image/webp"><img src="/v2/img/t-profile/profile-icons-5.png" alt="img"></picture>
+            </div>
+            <div class="t-profile__banner-items">
+                <div class="t-profile__banner-text">
+                    <h3>10 790₽ </h3>
+                    <p>------------</p>
+                </div><picture><source srcset="/v2/img/t-profile/profile-icons-5.webp"type="image/webp"><img src="/v2/img/t-profile/profile-icons-5.png" alt="img"></picture>
+            </div>
+        </div>
+    </section>
+    <section class="t-profile__info">
+        <div class="wrappers">
+            <div class="t-profile__info-student">
+                <div class="t-profile__info-student-title">Мои ученики</div>
+                <div class="t-profile__info-student-nav">
+                    <div class="t-profile__info-student-nav-items">Ученик</div>
+                    <div class="t-profile__info-student-nav-items">Предмет</div>
+                    <div class="t-profile__info-student-nav-items">Дата</div>
+                </div>
+                <ul class="t-profile__info-student-list">
+                    @foreach($lessons as $lesson)
+                    <li class="t-profile__info-student-items">
+                        <div class="t-profile__info-student-photo" style="background-image: url('{{$lesson->teacher->avatar}}');background-size:cover;"> </div>
+                        <div class="t-profile__info-student-name">{{$lesson->teacher->full_name}}</div>
+                        <div class="t-profile__info-student-lessons">
+                            {{$lesson->subject->name}}
+                        </div>
+                        <div class="t-profile__info-student-date">{{$lesson->start->diffForHumans()}}</div>
+                    </li>
+                    @endforeach
+                </ul>
+                <div class="t-profile__info-student-banner"><picture><source srcset="/v2/img/t-profile/icons-1.webp"type="image/webp"><img src="/v2/img/t-profile/icons-1.png" alt="img"></picture></div>
+            </div>
+            <div class="t-profile__info-lessons">
+                <div class="t-profile__info-lessons-title">Ближайшие занятия</div>
+                <div class="t-profile__info-lessons-nav">
+                    <div class="t-profile__info-lessons-nav-items">Название урока</div>
+                    <div class="t-profile__info-lessons-nav-items">Дата</div>
+                    <div class="t-profile__info-lessons-nav-items">Статус</div>
+                </div>
+                <div class="t-profile__info-lessons-wrapper">
+                    <ul class="t-profile__info-lessons-list">
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name t-profile__info-lessons-name-cancel">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect display-n">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                        <li class="t-profile__info-lessons-items">
+                            <div class="t-profile__info-lessons-name">Высшая математика</div>
+                            <div class="t-profile__info-lessons-date">12.01.2022</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-ready display-n">Состоится</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-cancel display-n">Отменен</div>
+                            <div class="t-profile__info-lessons-status t-profile__info-lessons-status-expect">Не подтвержден</div>
+                        </li>
+                    </ul>
+                    <div class="t-profile__info-lessons-banner"><picture><source srcset="/v2/img/t-profile/icons-2.webp"type="image/webp"><img src="/v2/img/t-profile/icons-2.png" alt="img"></picture></div>
                 </div>
             </div>
         </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card front-tile">
-                    <div class="card-header">Мои ученики</div>
-                    <ul class="list-group">
-                        @foreach(auth()->user()->students as $student)
-                            <li class="list-group-item"><img src="{{$student->avatar}}" alt="{{$student->full_name}}" class="avatar"> {{$student->full_name}}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card front-tile">
-                    <div class="card-header">Ближайшие занятия</div>
-                    <ul class="list-group">
-                        @foreach(\App\Lesson::with('subject')->where('teacher_id', auth()->id())->where('start', '>', \Carbon\Carbon::now())->limit(5)->get() as $lesson )
-                            <a href="{{route('teacher.lessons.show', $lesson->id)}}" class="list-group-item-action list-group-item d-flex justify-content-between align-items-center">
-                                <span class="badge badge-pill p-2 badge-primary">{{$lesson->subject->name}}</span>
-                                <span><img src="{{$student->photo}}" alt="{{$student->full_name}}" class="avatar"> {{$lesson->student->full_name}}</span>
-                                <span class="text-muted">{{$lesson->start->diffForHumans()}}</span>
-                            </a>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-</div>
-@stop
+    </section>
+@endsection

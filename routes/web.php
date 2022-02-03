@@ -110,6 +110,7 @@ Route::group([
     Route::view('/info', 'teacher.info')->name('info');
     Route::get('/profile', 'UserController@showProfile')->name('profile');
     Route::get('/students', 'UserController@showStudents')->name('students.index');
+    Route::post('/students', 'UserController@search')->name('students.find');
     Route::post('/subscribe', 'SubscribeController@store')->name('subscribe.store');
     Route::get('/subscribe', 'SubscribeController@index')->name('subscribe.index');
     Route::apiResource('/schedule', 'ScheduleController');
@@ -121,6 +122,7 @@ Route::group([
 });
 
 
+//Quiz check, delete late
 Route::post('/asd', function (){
     dd($_POST);
 })->name('check');

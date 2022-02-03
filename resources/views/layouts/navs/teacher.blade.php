@@ -36,9 +36,9 @@
 </ul> --}}
 
 
-<div class="menu"> 
+<div class="menu">
   <div class="menu__logo"> <img src="/v2/svg/menu/logos.svg" alt="logo"></div>
-  <div class="menu__list"> <a class="menu__list-items" href="t-profile.html" id="menuList-1">
+  <div class="menu__list"> <a class="menu__list-items @if(Route::is('teacher.index')) menu__list-items-active @endif" href="{{route('teacher.index')}}" id="menuList-1">
       <div class="menu__list-items-add"></div>
       <svg class="menu-icons">
         <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-1"></use>
@@ -46,15 +46,15 @@
       <div class="menu__list-items-add"></div>
       <svg class="menu-icons">
         <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-2"></use>
-      </svg></a><a class="menu__list-items menu__list-items-active" href="t-student.html" id="menuList-3">
+      </svg></a><a class="menu__list-items @if(Route::is('teacher.students.index')) menu__list-items-active @endif" href="{{route('teacher.students.index')}}" id="menuList-3">
       <div class="menu__list-items-add"></div>
       <svg class="menu-icons">
         <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-3"></use>
-      </svg></a><a class="menu__list-items" href="t-profile.html" id="menuList-4"> 
+      </svg></a><a class="menu__list-items" href="t-profile.html" id="menuList-4">
       <div class="menu__list-items-add"></div>
       <svg class="menu-icons">
         <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-4"></use>
-      </svg></a><a class="menu__list-items" href="t-profile.html" id="menuList-5"> 
+      </svg></a><a class="menu__list-items" href="t-profile.html" id="menuList-5">
       <div class="menu__list-items-add"></div>
       <svg class="menu-icons">
         <use xlink:href="/v2/svg/sprite.svg#menu--menu-icons-5"></use>
